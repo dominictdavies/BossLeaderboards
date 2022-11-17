@@ -24,25 +24,26 @@ namespace Leaderboards
             totalLifeLost += lifeLost;
 
             if (debug) {
-                Leaderboards.NewMessage(npc.FullName + " was hit!", Color.Orange);
+                if (player != default) {
+                    Leaderboards.NewMessage(
+                        npc.FullName + " was hit by " + player.name + " with " + item.Name, Color.Orange
+                    );
+                }
+
+                if (projectile != default) {
+                    Leaderboards.NewMessage(
+                        npc.FullName + " was hit by " + Main.player[projectile.owner].name + " with " + projectile.Name, Color.Orange
+                    );
+                }
+
                 Leaderboards.NewMessage("  Damage: " + damage);
                 Leaderboards.NewMessage("  Knockback: " + knockback);
                 Leaderboards.NewMessage("  Crit: " + crit);
                 Leaderboards.NewMessage("  Life lost: " + lifeLost);
                 Leaderboards.NewMessage("  Total life lost: " + totalLifeLost);
 
-                if (player != default) {
-                    Leaderboards.NewMessage("  Player: " + player.name);
-                    Leaderboards.NewMessage("  Item: " + item.Name);
-                }
-
-                if (projectile != default) {
-                    Leaderboards.NewMessage("  Projectile name: " + projectile.Name);
-                    Leaderboards.NewMessage("  Projectile owner: " + Main.player[projectile.owner].name);
-                }
-
                 if (npc.life <= 0) {
-                    Leaderboards.NewMessage(npc.FullName + " has died!", Color.Red);
+                    Leaderboards.NewMessage(npc.FullName + " was killed!", Color.Purple);
                 }
             }
         }
