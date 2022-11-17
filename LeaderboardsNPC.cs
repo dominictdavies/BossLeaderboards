@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace Leaderboards
@@ -7,7 +9,18 @@ namespace Leaderboards
     {
         public override void OnKill(NPC npc)
         {
-            Leaderboards.NewMessage(npc.FullName + " was killed!");
+            foreach (Player player in Main.player) {
+                if (player.active) {
+                    Dictionary<int, int> BossDamages = player.GetModPlayer<LeaderboardsPlayer>().BossDamages;
+                    if (BossDamages.ContainsKey(npc.whoAmI)) {
+                        Leaderboards.NewMessage(
+                            player.name + " dealt " + BossDamages[npc.whoAmI].ToString() + " damage.",
+                            Color.Yellow
+                        );
+                        BossDamages.Remove(npc.whoAmI);
+                    }
+                }
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -8,8 +9,16 @@ namespace Leaderboards
     {
         private bool debug = true;
 
+        public Dictionary<int, int> BossDamages = new Dictionary<int, int>();
+
         public void OnHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = default, Projectile proj = default)
         {
+            if (!BossDamages.ContainsKey(target.whoAmI)) {
+                BossDamages.Add(target.whoAmI, damage);
+            } else {
+                BossDamages[target.whoAmI] += damage;
+            }
+
             if (debug) {
                 if (item != default) {
                     Leaderboards.NewMessage(
