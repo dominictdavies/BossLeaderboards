@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Leaderboards
 {
     public class LifeTracker : GlobalNPC
     {
+        private bool debug = true;
         public int oldLife;
         public int totalLifeLost = 0;
 
@@ -23,25 +23,27 @@ namespace Leaderboards
             int lifeLost = oldLife - npc.life;
             totalLifeLost += lifeLost;
 
-            Leaderboards.NewMessage(npc.FullName + " was hit!", Color.Orange);
-            Leaderboards.NewMessage("  Damage: " + damage);
-            Leaderboards.NewMessage("  Knockback: " + knockback);
-            Leaderboards.NewMessage("  Crit: " + crit);
-            Leaderboards.NewMessage("  Life lost: " + lifeLost);
-            Leaderboards.NewMessage("  Total life lost: " + totalLifeLost);
+            if (debug) {
+                Leaderboards.NewMessage(npc.FullName + " was hit!", Color.Orange);
+                Leaderboards.NewMessage("  Damage: " + damage);
+                Leaderboards.NewMessage("  Knockback: " + knockback);
+                Leaderboards.NewMessage("  Crit: " + crit);
+                Leaderboards.NewMessage("  Life lost: " + lifeLost);
+                Leaderboards.NewMessage("  Total life lost: " + totalLifeLost);
 
-            if (player != default) {
-                Leaderboards.NewMessage("  Player: " + player.name);
-                Leaderboards.NewMessage("  Item: " + item.Name);
-            }
+                if (player != default) {
+                    Leaderboards.NewMessage("  Player: " + player.name);
+                    Leaderboards.NewMessage("  Item: " + item.Name);
+                }
 
-            if (projectile != default) {
-                Leaderboards.NewMessage("  Projectile name: " + projectile.Name);
-                Leaderboards.NewMessage("  Projectile owner: " + Main.player[projectile.owner].name);
-            }
+                if (projectile != default) {
+                    Leaderboards.NewMessage("  Projectile name: " + projectile.Name);
+                    Leaderboards.NewMessage("  Projectile owner: " + Main.player[projectile.owner].name);
+                }
 
-            if (npc.life <= 0) {
-                Leaderboards.NewMessage(npc.FullName + " has died!", Color.Red);
+                if (npc.life <= 0) {
+                    Leaderboards.NewMessage(npc.FullName + " has died!", Color.Red);
+                }
             }
         }
 
