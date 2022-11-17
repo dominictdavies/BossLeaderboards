@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace Leaderboards
 {
-    public class LifeTracker : ModPlayer
+    public class LeaderboardsPlayer : ModPlayer
     {
         private bool debug = true;
 
