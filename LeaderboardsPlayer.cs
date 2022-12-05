@@ -16,6 +16,16 @@ namespace Leaderboards
             shareContributions = new List<int>();
         }
 
+        public override void ResetEffects()
+        {
+            while (shareContributions.Count > 0) {
+                int contribution = shareContributions[0];
+                Main.NewText(Player.name + " dealt " + contributions[contribution] + " damage to " + Main.npc[contribution].FullName, Color.Aqua);
+                contributions[contribution] = 0;
+                shareContributions.RemoveAt(0);
+            }
+        }
+
         public void OnHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = default, Projectile proj = default)
         {
             contributions[target.whoAmI] += damage;
@@ -27,7 +37,7 @@ namespace Leaderboards
                     );
 
                 if (proj != default) Main.NewText(
-                        target.FullName + " was hit by " + Main.player[proj.owner].name + " with " + proj.Name,
+                        target.FullName + " was hit by " + Player.name + " with " + proj.Name,
                         Color.Orange
                     );
 
@@ -47,16 +57,6 @@ namespace Leaderboards
             => OnHitNPCWithAnything(target, damage, knockback, crit, item: item);
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
-            => OnHitNPCWithAnything(target, (crit ? damage * 2 : damage) - target.defense, knockback, crit, proj: proj);
-
-        public override void ResetEffects()
-        {
-            while (shareContributions.Count > 0) {
-                int contributionIndex = shareContributions[0];
-                Main.NewText(Player.name + " dealt " + contributions[contributionIndex] + " damage.", Color.Aqua);
-                contributions[contributionIndex] = 0;
-                shareContributions.RemoveAt(0);
-            }
-        }
+            => OnHitNPCWithAnything(target, crit ? damage * 2 : damage, knockback, crit, proj: proj);
     }
 }

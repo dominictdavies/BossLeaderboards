@@ -5,11 +5,11 @@ namespace Leaderboards
 {
     public class LeaderboardsNPC : GlobalNPC
     {
-        private bool despawnFlag = false;
+        private bool despawning = false;
 
         public override bool InstancePerEntity => true;
 
-        public void ShareNPCContributions(NPC npc)
+        public void ShareContributions(NPC npc)
         {
             foreach (Player player in Main.player) {
                 if (player.active) {
@@ -18,17 +18,17 @@ namespace Leaderboards
             }
         }
 
-        public override void OnKill(NPC npc)
-        {
-            ShareNPCContributions(npc);
-        }
-
         public override void ResetEffects(NPC npc)
         {
-            if (npc.despawnEncouraged && !despawnFlag) {
-                ShareNPCContributions(npc);
-                despawnFlag = true;
+            if (npc.despawnEncouraged && !despawning) {
+                ShareContributions(npc);
+                despawning = true;
             }
+        }
+
+        public override void OnKill(NPC npc)
+        {
+            ShareContributions(npc);
         }
     }
 }
