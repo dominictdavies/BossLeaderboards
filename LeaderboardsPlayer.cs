@@ -19,9 +19,12 @@ namespace Leaderboards
         public override void ResetEffects()
         {
             while (shareContributions.Count > 0) {
-                int contribution = shareContributions[0];
-                Main.NewText(Player.name + " dealt " + contributions[contribution] + " damage to " + Main.npc[contribution].FullName, Color.Aqua);
-                contributions[contribution] = 0;
+                int contributionIndex = shareContributions[0];
+                Main.NewText(
+                    Player.name + " dealt " + contributions[contributionIndex] + " damage to " + Main.npc[contributionIndex].FullName,
+                    Color.Aqua
+                );
+                contributions[contributionIndex] = 0;
                 shareContributions.RemoveAt(0);
             }
         }
@@ -31,15 +34,10 @@ namespace Leaderboards
             contributions[target.whoAmI] += damage;
 
             if (Leaderboards.debug) {
-                if (item != default) Main.NewText(
-                        target.FullName + " was hit by " + Player.name + " with " + item.Name,
-                        Color.Orange
-                    );
-
-                if (proj != default) Main.NewText(
-                        target.FullName + " was hit by " + Player.name + " with " + proj.Name,
-                        Color.Orange
-                    );
+                Main.NewText(
+                    target.FullName + " was hit by " + Player.name + " with " + proj == default ? item.Name : proj.Name,
+                    Color.Orange
+                );
 
                 //Main.NewText("  Damage: " + damage);
                 //Main.NewText("  Knockback: " + knockback);
