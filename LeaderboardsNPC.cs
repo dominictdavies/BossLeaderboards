@@ -9,11 +9,11 @@ namespace Leaderboards
 
         private bool despawning = false;
 
-        public void ShareContributions(NPC npc)
+        public void PlayersShare()
         {
             foreach (Player player in Main.player) {
                 if (player.active) {
-                    player.GetModPlayer<LeaderboardsPlayer>().shareContributions.Add(npc.whoAmI);
+                    player.GetModPlayer<LeaderboardsPlayer>().share = true;
                 }
             }
         }
@@ -21,14 +21,11 @@ namespace Leaderboards
         public override void ResetEffects(NPC npc)
         {
             if (npc.despawnEncouraged && !despawning) {
-                ShareContributions(npc);
+                PlayersShare();
                 despawning = true;
             }
         }
 
-        public override void OnKill(NPC npc)
-        {
-            ShareContributions(npc);
-        }
+        public override void OnKill(NPC npc) => PlayersShare();
     }
 }
