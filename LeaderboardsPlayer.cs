@@ -35,7 +35,7 @@ namespace Leaderboards
 
             if (Leaderboards.debug) {
                 Main.NewText(
-                    target.FullName + " was hit by " + Player.name + " with " + proj == default ? item.Name : proj.Name,
+                    target.FullName + " was hit by " + Player.name + " with " + (proj == default ? item.Name : proj.Name),
                     Color.Orange
                 );
 

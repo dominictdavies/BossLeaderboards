@@ -5,9 +5,9 @@ namespace Leaderboards
 {
     public class LeaderboardsNPC : GlobalNPC
     {
-        private bool despawning = false;
-
         public override bool InstancePerEntity => true;
+
+        private bool despawning = false;
 
         public void ShareContributions(NPC npc)
         {
