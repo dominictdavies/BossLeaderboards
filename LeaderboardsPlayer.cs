@@ -35,7 +35,7 @@ namespace Leaderboards
                 //Main.NewText("  Damage: " + damage);
                 //Main.NewText("  Knockback: " + knockback);
                 //Main.NewText("  Crit: " + crit);
-                Main.NewText("  Contribution = " + contribution);
+                //Main.NewText("  Contribution = " + contribution);
             }
         }
 

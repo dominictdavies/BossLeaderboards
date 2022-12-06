@@ -5,10 +5,6 @@ namespace Leaderboards
 {
     public class LeaderboardsNPC : GlobalNPC
     {
-        public override bool InstancePerEntity => true;
-
-        private bool despawning = false;
-
         public void PlayersShare()
         {
             foreach (Player player in Main.player) {
@@ -18,14 +14,8 @@ namespace Leaderboards
             }
         }
 
-        public override void ResetEffects(NPC npc)
-        {
-            if (npc.despawnEncouraged && !despawning) {
-                PlayersShare();
-                despawning = true;
-            }
+        public override void OnKill(NPC npc) {
+            if (npc.boss) PlayersShare();
         }
-
-        public override void OnKill(NPC npc) => PlayersShare();
     }
 }
