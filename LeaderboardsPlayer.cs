@@ -17,7 +17,7 @@ namespace Leaderboards
         {
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC && contribution != 0) {
                 Main.NewText(
-                    Player.name + " dealt " + contribution + " during the boss fight.",
+                    Player.name + " dealt " + contribution + " damage during the boss fight.",
                     Color.Aqua
                 );
                 contribution = 0;
