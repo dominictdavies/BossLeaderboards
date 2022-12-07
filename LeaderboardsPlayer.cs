@@ -7,35 +7,32 @@ namespace Leaderboards
     public class LeaderboardsPlayer : ModPlayer
     {
         public int contribution = 0;
-        public bool share = false;
 
         public override void OnEnterWorld(Player player)
         {
             contribution = 0;
-            share = false;
         }
 
-        public override void ResetEffects()
+        public override void PreUpdate()
         {
-            if (share) {
+            if (!Main.CurrentFrameFlags.AnyActiveBossNPC && contribution != 0) {
                 Main.NewText(
                     Player.name + " dealt " + contribution + " during the boss fight.",
                     Color.Aqua
                 );
                 contribution = 0;
-                share = false;
             }
         }
 
         public void OnHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = default, Projectile proj = default)
         {
-            contribution += damage;
+            if (Main.CurrentFrameFlags.AnyActiveBossNPC) contribution += damage;
 
             if (Leaderboards.debug) {
-                //Main.NewText("  Damage: " + damage);
-                //Main.NewText("  Knockback: " + knockback);
-                //Main.NewText("  Crit: " + crit);
-                //Main.NewText("  Contribution = " + contribution);
+                Main.NewText("  Damage: " + damage);
+                Main.NewText("  Knockback: " + knockback);
+                Main.NewText("  Crit: " + crit);
+                Main.NewText("  Contribution: " + contribution);
             }
         }
 
