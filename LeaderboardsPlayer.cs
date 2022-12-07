@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,10 +13,7 @@ namespace Leaderboards
         public override void PreUpdate()
         {
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC && contribution != 0) {
-                Main.NewText(
-                    "You dealt " + contribution + " damage during the boss fight.",
-                    Color.Magenta
-                );
+                LeaderboardsFunctions.SendContribution(Player, contribution);
 
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     ModPacket packet = Mod.GetPacket();
@@ -34,10 +30,10 @@ namespace Leaderboards
             if (Main.CurrentFrameFlags.AnyActiveBossNPC) contribution += damage;
 
             if (Leaderboards.debug) {
-                Main.NewText("  Damage: " + damage);
-                Main.NewText("  Knockback: " + knockback);
-                Main.NewText("  Crit: " + crit);
-                Main.NewText("  Contribution: " + contribution);
+                Main.NewText("Damage: " + damage);
+                Main.NewText("Knockback: " + knockback);
+                Main.NewText("Crit: " + crit);
+                Main.NewText("Contribution: " + contribution);
             }
         }
 

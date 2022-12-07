@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
 using Terraria.ID;
@@ -20,11 +19,7 @@ namespace Leaderboards
             } else {
                 Player contributor = Main.player[reader.ReadByte()];
                 int contribution = reader.ReadInt32();
-
-                Main.NewText(
-                    contributor.name + " dealt " + contribution + " damage during the boss fight.",
-                    Color.Magenta
-                );
+                LeaderboardsFunctions.SendContribution(contributor, contribution);
             }
         }
     }
