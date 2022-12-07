@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Leaderboards
@@ -8,18 +9,22 @@ namespace Leaderboards
     {
         public int contribution = 0;
 
-        public override void OnEnterWorld(Player player)
-        {
-            contribution = 0;
-        }
+        public override void OnEnterWorld(Player player) => contribution = 0;
 
         public override void PreUpdate()
         {
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC && contribution != 0) {
                 Main.NewText(
-                    Player.name + " dealt " + contribution + " damage during the boss fight.",
-                    Color.Aqua
+                    "You dealt " + contribution + " damage during the boss fight.",
+                    Color.Magenta
                 );
+
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    ModPacket packet = Mod.GetPacket();
+                    packet.Write(contribution);
+                    packet.Send();
+                }
+
                 contribution = 0;
             }
         }
