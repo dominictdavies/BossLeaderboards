@@ -3,7 +3,7 @@ using Terraria;
 
 namespace Leaderboards
 {
-    public class LeaderboardsFunctions
+    public static class LeaderboardsFunctions
     {
         public static void SendContribution(Player contributor, int contribution)
         {

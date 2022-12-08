@@ -7,8 +7,6 @@ namespace Leaderboards
 {
     public class Leaderboards : Mod
     {
-        public static bool debug = false;
-
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             if (Main.netMode == NetmodeID.Server) {

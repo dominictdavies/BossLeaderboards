@@ -25,15 +25,22 @@ namespace Leaderboards
             }
         }
 
-        public void OnHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = default, Projectile proj = default)
+        public void OnHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
         {
-            if (Main.CurrentFrameFlags.AnyActiveBossNPC) contribution += damage;
+            if (Main.CurrentFrameFlags.AnyActiveBossNPC) {
+                LeaderboardsNPC leaderboardsTarget = target.GetGlobalNPC<LeaderboardsNPC>();
+                int dealtDamage = leaderboardsTarget.oldLife - target.life;
+                contribution += dealtDamage > 0 ? dealtDamage : 0;
+            }
 
-            if (Leaderboards.debug) {
+            if (Debug.chat) {
+                Main.NewText((proj == null ? "Item: " : "Proj: ") + "True");
+                Main.NewText("Target: " + target.FullName);
                 Main.NewText("Damage: " + damage);
                 Main.NewText("Knockback: " + knockback);
                 Main.NewText("Crit: " + crit);
                 Main.NewText("Contribution: " + contribution);
+                Main.NewText("");
             }
         }
 
@@ -41,6 +48,6 @@ namespace Leaderboards
             => OnHitNPCWithAnything(target, damage, knockback, crit, item: item);
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
-            => OnHitNPCWithAnything(target, crit ? damage * 2 : damage, knockback, crit, proj: proj);
+            => OnHitNPCWithAnything(target, damage, knockback, crit, proj: proj);
     }
 }
