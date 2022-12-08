@@ -5,12 +5,16 @@ namespace Leaderboards
 {
     public static class LeaderboardsFunctions
     {
-        public static void SendContribution(Player contributor, int contribution)
+        public static void NewContribution(Player player)
         {
+            LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
+
             Main.NewText(
-                contributor.name + " contributed " + contribution + " damage.",
+                player.name + " contributed " + leaderboardsPlayer.contribution + " damage.",
                 Color.Magenta
             );
+
+            leaderboardsPlayer.contribution = 0;
         }
     }
 }
