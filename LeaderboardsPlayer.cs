@@ -6,8 +6,8 @@ namespace Leaderboards
 {
     public class LeaderboardsPlayer : ModPlayer
     {
-        public int targetOldLife;
         public int contribution = 0;
+        public int targetOldLife;
 
         public override void PreUpdate()
         {
@@ -19,7 +19,7 @@ namespace Leaderboards
                     packet.Send();
                 }
 
-                LeaderboardsFunctions.NewContribution(Player);
+                LeaderboardsFunctions.PushContribution(Player);
             }
         }
 
@@ -30,7 +30,7 @@ namespace Leaderboards
         {
             if (Main.CurrentFrameFlags.AnyActiveBossNPC) {
                 int damageDealt = target.life > 0 ? targetOldLife - target.life : targetOldLife;
-                contribution += damageDealt;
+                if (damageDealt > 0) contribution += damageDealt;
             }
         }
 

@@ -19,7 +19,7 @@ namespace Leaderboards
                 // Write out the received contribution
                 Player contributor = Main.player[reader.ReadByte()];
                 contributor.GetModPlayer<LeaderboardsPlayer>().contribution = reader.ReadInt32();
-                LeaderboardsFunctions.NewContribution(contributor);
+                LeaderboardsFunctions.PushContribution(contributor);
             }
         }
     }
