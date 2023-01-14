@@ -5,7 +5,7 @@ namespace Leaderboards
 {
     public static class LeaderboardsFunctions
     {
-        public static void NewContribution(Player player)
+        public static void PushContribution(Player player)
         {
             LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
 
