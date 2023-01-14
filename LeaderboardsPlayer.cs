@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using System.Collections.Generic;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -6,16 +7,20 @@ namespace Leaderboards
 {
     public class LeaderboardsPlayer : ModPlayer
     {
-        public int contribution = 0;
+        public Dictionary<string, Contribution> bossContributions = new();
         public int targetOldLife;
 
         public override void PreUpdate()
         {
             // One execution after all active bosses are defeated
-            if (!Main.CurrentFrameFlags.AnyActiveBossNPC && contribution != 0) {
+            if (!Main.CurrentFrameFlags.AnyActiveBossNPC && bossContributions.Count > 0) {
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     ModPacket packet = Mod.GetPacket();
-                    packet.Write(contribution);
+                    foreach (KeyValuePair<string, Contribution> pair in bossContributions) {
+                        packet.Write(pair.Key);
+                        packet.Write(pair.Value.totalDamage);
+                        packet.Write(pair.Value.totalLifeLost);
+                    }
                     packet.Send();
                 }
 
@@ -30,7 +35,13 @@ namespace Leaderboards
         {
             if (Main.CurrentFrameFlags.AnyActiveBossNPC) {
                 int damageDealt = target.life > 0 ? targetOldLife - target.life : targetOldLife;
-                if (damageDealt > 0) contribution += damageDealt;
+                if (damageDealt > 0) {
+                    if (bossContributions.ContainsKey(target.FullName)) {
+                        bossContributions[target.FullName].totalDamage += damageDealt;
+                    } else {
+                        bossContributions[target.FullName] = new Contribution(damageDealt);
+                    }
+                }
             }
         }
 

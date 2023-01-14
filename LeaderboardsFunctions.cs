@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 
 namespace Leaderboards
@@ -9,12 +10,14 @@ namespace Leaderboards
         {
             LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
 
-            Main.NewText(
-                player.name + " contributed " + leaderboardsPlayer.contribution + " damage.",
-                Color.Magenta
-            );
+            foreach (KeyValuePair<string, Contribution> pair in leaderboardsPlayer.bossContributions) {
+                Main.NewText(
+                    player.name + " contributed " + pair.Value.totalDamage + " damage to " + pair.Key + ".",
+                    Color.Magenta
+                );
 
-            leaderboardsPlayer.contribution = 0;
+                leaderboardsPlayer.bossContributions.Remove(pair.Key);
+            }
         }
     }
 }
