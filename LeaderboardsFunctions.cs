@@ -10,13 +10,20 @@ namespace Leaderboards
         {
             LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
 
-            foreach (KeyValuePair<string, Contribution> pair in leaderboardsPlayer.bossContributions) {
+            foreach (KeyValuePair<string, Contribution> bossContribution in leaderboardsPlayer.bossContributions) {
                 Main.NewText(
-                    player.name + " contributed " + pair.Value.totalDamage + " damage to " + pair.Key + ".",
+                    player.name + " contributed " + bossContribution.Value.totalDamage + " damage to " + bossContribution.Key + ".",
                     Color.Magenta
                 );
 
-                leaderboardsPlayer.bossContributions.Remove(pair.Key);
+                if (bossContribution.Value.totalLifeLost > 0) {
+                    Main.NewText(
+                        player.name + " lost " + bossContribution.Value.totalLifeLost + " life to " + bossContribution.Key + ".",
+                        Color.Magenta
+                    );
+                }
+
+                leaderboardsPlayer.bossContributions.Remove(bossContribution.Key);
             }
         }
     }

@@ -5,10 +5,11 @@ using Terraria.ModLoader;
 
 namespace Leaderboards
 {
-    public class LeaderboardsPlayer : ModPlayer
+    public partial class LeaderboardsPlayer : ModPlayer
     {
         public Dictionary<string, Contribution> bossContributions = new();
         public int targetOldLife;
+        public int playerOldLife;
 
         public override void PreUpdate()
         {
@@ -16,10 +17,10 @@ namespace Leaderboards
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC && bossContributions.Count > 0) {
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     ModPacket packet = Mod.GetPacket();
-                    foreach (KeyValuePair<string, Contribution> pair in bossContributions) {
-                        packet.Write(pair.Key);
-                        packet.Write(pair.Value.totalDamage);
-                        packet.Write(pair.Value.totalLifeLost);
+                    foreach (KeyValuePair<string, Contribution> bossContribution in bossContributions) {
+                        packet.Write(bossContribution.Key);
+                        packet.Write(bossContribution.Value.totalDamage);
+                        packet.Write(bossContribution.Value.totalLifeLost);
                     }
                     packet.Send();
                 }
@@ -36,25 +37,32 @@ namespace Leaderboards
             if (Main.CurrentFrameFlags.AnyActiveBossNPC) {
                 int damageDealt = target.life > 0 ? targetOldLife - target.life : targetOldLife;
                 if (damageDealt > 0) {
-                    if (bossContributions.ContainsKey(target.FullName)) {
-                        bossContributions[target.FullName].totalDamage += damageDealt;
+                    if (bossContributions.TryGetValue(target.FullName, out Contribution contribution)) {
+                        contribution.totalDamage += damageDealt;
                     } else {
-                        bossContributions[target.FullName] = new Contribution(damageDealt);
+                        bossContributions.Add(target.FullName, new Contribution(totalDamage: damageDealt));
                     }
                 }
             }
         }
 
-        public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
-            => ModifyHitNPCWithAnything(target, damage, knockback, crit, item: item);
+        public void ModifyHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
+            => playerOldLife = Player.statLife;
 
-        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-            => ModifyHitNPCWithAnything(target, damage, knockback, crit, proj: proj);
+        public void OnHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
+        {
+            npc ??= Main.npc[proj.owner];
 
-        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
-            => OnHitNPCWithAnything(target, damage, knockback, crit, item: item);
-
-        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
-            => OnHitNPCWithAnything(target, damage, knockback, crit, proj: proj);
+            if (Main.CurrentFrameFlags.AnyActiveBossNPC) {
+                int lifeLost = Player.statLife > 0 ? playerOldLife - Player.statLife : playerOldLife;
+                if (lifeLost > 0) {
+                    if (bossContributions.TryGetValue(npc.FullName, out Contribution contribution)) {
+                        contribution.totalLifeLost += lifeLost;
+                    } else {
+                        bossContributions.Add(npc.FullName, new Contribution(totalLifeLost: lifeLost));
+                    }
+                }
+            }
+        }
     }
 }

@@ -20,7 +20,10 @@ namespace Leaderboards
             } else {
                 // Write out the received contribution
                 Player contributor = Main.player[reader.ReadByte()];
-                contributor.GetModPlayer<LeaderboardsPlayer>().bossContributions.Add(reader.ReadString(), new Contribution(reader.ReadInt32(), reader.ReadInt32()));
+                contributor.GetModPlayer<LeaderboardsPlayer>().bossContributions.Add(
+                    reader.ReadString(), 
+                    new Contribution(reader.ReadInt32(), reader.ReadInt32())
+                );
                 LeaderboardsFunctions.PushContribution(contributor);
             }
         }
