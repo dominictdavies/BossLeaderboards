@@ -16,12 +16,10 @@ namespace Leaderboards
                     Color.Magenta
                 );
 
-                if (bossContribution.Value.totalLifeLost > 0) {
-                    Main.NewText(
-                        player.name + " lost " + bossContribution.Value.totalLifeLost + " life to " + bossContribution.Key + ".",
-                        Color.Magenta
-                    );
-                }
+                Main.NewText(
+                    player.name + " lost " + bossContribution.Value.totalLifeLost + " life to " + bossContribution.Key + ".",
+                    Color.Red
+                );
 
                 leaderboardsPlayer.bossContributions.Remove(bossContribution.Key);
             }
