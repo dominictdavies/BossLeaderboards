@@ -17,14 +17,16 @@ namespace Leaderboards
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC && bossContributions.Count > 0) {
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     ModPacket packet = Mod.GetPacket();
+                    packet.Write(bossContributions.Count); // Write the number of contributions
+
                     foreach (KeyValuePair<string, Contribution> bossContribution in bossContributions) {
                         packet.Write(bossContribution.Key);
                         packet.Write(bossContribution.Value.totalDamage);
                         packet.Write(bossContribution.Value.totalLifeLost);
                     }
+
                     packet.Send();
                 }
-
                 LeaderboardsFunctions.PushContribution(Player);
             }
         }
