@@ -1,49 +1,71 @@
-﻿using Terraria;
+﻿using System.Collections.Generic;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Leaderboards
 {
-    public class LeaderboardsPlayer : ModPlayer
+    public partial class LeaderboardsPlayer : ModPlayer
     {
+        public Dictionary<string, Contribution> contributions = new();
         public int targetOldLife;
-        public int contribution = 0;
+        public int playerOldLife;
+
+        public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
+            => targetOldLife = target.life;
+
+        public void PostHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
+        {
+            if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
+                return;
+
+            int damageDealt = target.life > 0 ? targetOldLife - target.life : targetOldLife;
+            if (damageDealt > 0) {
+                if (contributions.TryGetValue(target.FullName, out Contribution contribution)) {
+                    contribution.totalDamageTo += damageDealt;
+                } else {
+                    contributions.Add(target.FullName, new Contribution(totalDamageTo: damageDealt));
+                }
+            }
+        }
+
+        public void PreHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
+            => playerOldLife = Player.statLife;
+
+        public void PostHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
+        {
+            if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
+                return;
+
+            string fullName = npc != null ? npc.FullName : proj.Name;
+            int lifeLost = Player.statLife > 0 ? playerOldLife - Player.statLife : playerOldLife;
+            if (lifeLost > 0) {
+                if (contributions.TryGetValue(fullName, out Contribution contribution))
+                    contribution.totalLifeLostFrom += lifeLost;
+                else
+                    contributions.Add(fullName, new Contribution(totalLifeLostFrom: lifeLost));
+            }
+        }
 
         public override void PreUpdate()
         {
-            // One execution after all active bosses are defeated
-            if (!Main.CurrentFrameFlags.AnyActiveBossNPC && contribution != 0) {
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    ModPacket packet = Mod.GetPacket();
-                    packet.Write(contribution);
-                    packet.Send();
+            if (Main.CurrentFrameFlags.AnyActiveBossNPC || contributions.Count == 0)
+                return; // Proceed in execution if client participated in boss battle
+
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                ModPacket packet = Mod.GetPacket();
+                packet.Write(contributions.Count);
+
+                foreach (KeyValuePair<string, Contribution> bossContribution in contributions) {
+                    packet.Write(bossContribution.Key);
+                    packet.Write(bossContribution.Value.totalDamageTo);
+                    packet.Write(bossContribution.Value.totalLifeLostFrom);
                 }
 
-                LeaderboardsFunctions.NewContribution(Player);
+                packet.Send();
             }
+
+            LeaderboardsFunctions.PushContribution(Player);
         }
-
-        public void ModifyHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
-            => targetOldLife = target.life;
-
-        public void OnHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
-        {
-            if (Main.CurrentFrameFlags.AnyActiveBossNPC) {
-                int damageDealt = target.life > 0 ? targetOldLife - target.life : targetOldLife;
-                contribution += damageDealt;
-            }
-        }
-
-        public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
-            => ModifyHitNPCWithAnything(target, damage, knockback, crit, item: item);
-
-        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-            => ModifyHitNPCWithAnything(target, damage, knockback, crit, proj: proj);
-
-        public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
-            => OnHitNPCWithAnything(target, damage, knockback, crit, item: item);
-
-        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
-            => OnHitNPCWithAnything(target, damage, knockback, crit, proj: proj);
     }
 }

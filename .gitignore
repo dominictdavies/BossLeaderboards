@@ -2,9 +2,9 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/Properties
-/obj
-/Leaderboards.sln
-/Leaderboards.csproj
-/bin/Debug/net6.0
 /.vs
+/bin
+/obj
+/Properties
+/Leaderboards.csproj
+/Leaderboards.sln
