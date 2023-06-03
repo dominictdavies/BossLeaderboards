@@ -2,13 +2,13 @@
 {
     public class Contribution
     {
-        public int totalDamage;
-        public int totalLifeLost;
+        public int totalDamageTo;
+        public int totalLifeLostFrom;
 
-        public Contribution(int totalDamage = 0, int totalLifeLost = 0)
+        public Contribution(int totalDamageTo = 0, int totalLifeLostFrom = 0)
         {
-            this.totalDamage = totalDamage;
-            this.totalLifeLost = totalLifeLost;
+            this.totalDamageTo = totalDamageTo;
+            this.totalLifeLostFrom = totalLifeLostFrom;
         }
     }
 }

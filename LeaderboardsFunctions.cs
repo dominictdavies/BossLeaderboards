@@ -6,22 +6,24 @@ namespace Leaderboards
 {
     public static class LeaderboardsFunctions
     {
+        public const int debug = 1;
+
         public static void PushContribution(Player player)
         {
             LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
 
-            foreach (KeyValuePair<string, Contribution> bossContribution in leaderboardsPlayer.bossContributions) {
+            foreach (KeyValuePair<string, Contribution> bossContribution in leaderboardsPlayer.contributions) {
                 Main.NewText(
-                    player.name + " contributed " + bossContribution.Value.totalDamage + " damage to " + bossContribution.Key + ".",
+                    player.name + " dealt " + bossContribution.Value.totalDamageTo + " damage to " + bossContribution.Key + ".",
                     Color.Magenta
                 );
 
                 Main.NewText(
-                    player.name + " lost " + bossContribution.Value.totalLifeLost + " life to " + bossContribution.Key + ".",
+                    player.name + " lost " + bossContribution.Value.totalLifeLostFrom + " life to " + bossContribution.Key + ".",
                     Color.Red
                 );
 
-                leaderboardsPlayer.bossContributions.Remove(bossContribution.Key);
+                leaderboardsPlayer.contributions.Remove(bossContribution.Key);
             }
         }
     }
