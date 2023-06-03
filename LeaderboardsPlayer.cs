@@ -7,12 +7,9 @@ namespace Leaderboards
 {
     public partial class LeaderboardsPlayer : ModPlayer
     {
-        public Dictionary<string, Contribution> contributions;
+        public Dictionary<string, Contribution> contributions = new();
         public int targetOldLife;
         public int playerOldLife;
-
-        public override void OnEnterWorld(Player player)
-            => contributions = new();
 
         public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
             => targetOldLife = target.life;
@@ -37,18 +34,16 @@ namespace Leaderboards
 
         public void PostHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
         {
-            npc ??= Main.npc[proj.owner]; // What if no owner?
-
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
                 return;
 
+            string fullName = npc != null ? npc.FullName : proj.Name;
             int lifeLost = Player.statLife > 0 ? playerOldLife - Player.statLife : playerOldLife;
             if (lifeLost > 0) {
-                if (contributions.TryGetValue(npc.FullName, out Contribution contribution)) {
+                if (contributions.TryGetValue(fullName, out Contribution contribution))
                     contribution.totalLifeLostFrom += lifeLost;
-                } else {
-                    contributions.Add(npc.FullName, new Contribution(totalLifeLostFrom: lifeLost));
-                }
+                else
+                    contributions.Add(fullName, new Contribution(totalLifeLostFrom: lifeLost));
             }
         }
 
