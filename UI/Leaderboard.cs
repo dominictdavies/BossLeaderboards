@@ -16,25 +16,25 @@ namespace Leaderboards.UI
             panel.HAlign = panel.VAlign = 0.5f;
             Append(panel);
 
-            UIText header = new UIText("Leaderboard");
-            header.HAlign = 0.5f;
-            header.Top.Set(15, 0);
-            panel.Append(header);
+            UIText title = new UIText("Leaderboard");
+            title.HAlign = 0.5f;
+            title.Top.Set(15, 0);
+            panel.Append(title);
 
-            UIPanel button = new UIPanel();
-            button.Width.Set(30, 0);
-            button.Height.Set(30, 0);
-            button.Top.Set(10, 0);
-            button.Left.Set(10, 0);
-            button.OnClick += OnButtonClick;
-            panel.Append(button);
+            UIPanel closeButton = new UIPanel();
+            closeButton.Width.Set(30, 0);
+            closeButton.Height.Set(30, 0);
+            closeButton.Top.Set(10, 0);
+            closeButton.Left.Set(10, 0);
+            closeButton.OnClick += OnCloseButtonClick;
+            panel.Append(closeButton);
 
-            UIText text = new UIText("X");
-            text.HAlign = text.VAlign = 0.5f;
-            button.Append(text);
+            UIText closeText = new UIText("X");
+            closeText.HAlign = closeText.VAlign = 0.5f;
+            closeButton.Append(closeText);
         }
 
-        private void OnButtonClick(UIMouseEvent evt, UIElement listeningElement)
+        private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)
         {
             ModContent.GetInstance<LeaderboardSystem>().HideMyUI();
             SoundEngine.PlaySound(SoundID.MenuTick);
