@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Leaderboards.UI;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -51,6 +52,8 @@ namespace Leaderboards
         {
             if (Main.CurrentFrameFlags.AnyActiveBossNPC || contributions.Count == 0)
                 return; // Proceed in execution if client participated in boss battle
+
+            ModContent.GetInstance<LeaderboardSystem>().ShowMyUI();
 
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 ModPacket packet = Mod.GetPacket();
