@@ -25,7 +25,7 @@ namespace Leaderboards.UI
             closeButton.Width.Set(30, 0);
             closeButton.Height.Set(30, 0);
             closeButton.Top.Set(10, 0);
-            closeButton.Left.Set(10, 0);
+            closeButton.Left.Set(-10 - closeButton.Width.Pixels, 1);
             closeButton.OnClick += OnCloseButtonClick;
             panel.Append(closeButton);
 
