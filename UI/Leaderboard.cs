@@ -21,6 +21,18 @@ namespace Leaderboards.UI
             title.Top.Set(15, 0);
             panel.Append(title);
 
+            UIPanel resetButton = new UIPanel();
+            resetButton.Width.Set(30, 0);
+            resetButton.Height.Set(30, 0);
+            resetButton.Top.Set(10, 0);
+            resetButton.Left.Set(10, 0);
+            resetButton.OnClick += OnCloseButtonClick;
+            panel.Append(resetButton);
+
+            UIText resetText = new UIText("V");
+            resetText.HAlign = resetText.VAlign = 0.5f;
+            resetButton.Append(resetText);
+
             UIPanel closeButton = new UIPanel();
             closeButton.Width.Set(30, 0);
             closeButton.Height.Set(30, 0);
