@@ -2,13 +2,19 @@
 {
     public class Contribution
     {
-        public int totalDamageTo;
-        public int totalLifeLostFrom;
+        public int damage;
+        public int kills;
+        public int lifeLost;
+        public int hitsTaken;
+        public int deaths;
 
-        public Contribution(int totalDamageTo = 0, int totalLifeLostFrom = 0)
+        public Contribution(int damage = 0, int kills = 0, int lifeLost = 0, int hitsTaken = 0, int deaths = 0)
         {
-            this.totalDamageTo = totalDamageTo;
-            this.totalLifeLostFrom = totalLifeLostFrom;
+            this.damage = damage;
+            this.kills = kills;
+            this.lifeLost = lifeLost;
+            this.hitsTaken = hitsTaken;
+            this.deaths = deaths;
         }
     }
 }

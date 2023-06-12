@@ -12,16 +12,17 @@ namespace Leaderboards
         {
             LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
 
-            foreach (KeyValuePair<string, Contribution> bossContribution in leaderboardsPlayer.contributions) {
-                if (bossContribution.Value.totalDamageTo > 0 || debug > 0)
+            foreach (KeyValuePair<string, Contribution> bossContribution in leaderboardsPlayer.contributions)
+            {
+                if (bossContribution.Value.damage > 0 || debug > 0)
                     Main.NewText(
-                        player.name + " dealt " + bossContribution.Value.totalDamageTo + " damage to " + bossContribution.Key + ".",
+                        player.name + " dealt " + bossContribution.Value.damage + " damage to " + bossContribution.Key + ".",
                         Color.Magenta
                     );
 
-                if (bossContribution.Value.totalLifeLostFrom > 0 || debug > 0)
+                if (bossContribution.Value.lifeLost > 0 || debug > 0)
                     Main.NewText(
-                        player.name + " lost " + bossContribution.Value.totalLifeLostFrom + " life to " + bossContribution.Key + ".",
+                        player.name + " lost " + bossContribution.Value.lifeLost + " life to " + bossContribution.Key + ".",
                         Color.Red
                     );
 

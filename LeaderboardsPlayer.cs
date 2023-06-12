@@ -20,11 +20,15 @@ namespace Leaderboards
                 return;
 
             int damageDealt = target.life > 0 ? targetOldLife - target.life : targetOldLife;
-            if (damageDealt > 0) {
-                if (contributions.TryGetValue(target.FullName, out Contribution contribution)) {
-                    contribution.totalDamageTo += damageDealt;
-                } else {
-                    contributions.Add(target.FullName, new Contribution(totalDamageTo: damageDealt));
+            if (damageDealt > 0)
+            {
+                if (contributions.TryGetValue(target.FullName, out Contribution contribution))
+                {
+                    contribution.damage += damageDealt;
+                }
+                else
+                {
+                    contributions.Add(target.FullName, new Contribution(damage: damageDealt));
                 }
             }
         }
@@ -39,11 +43,12 @@ namespace Leaderboards
 
             string fullName = npc != null ? npc.FullName : proj.Name;
             int lifeLost = Player.statLife > 0 ? playerOldLife - Player.statLife : playerOldLife;
-            if (lifeLost > 0) {
+            if (lifeLost > 0)
+            {
                 if (contributions.TryGetValue(fullName, out Contribution contribution))
-                    contribution.totalLifeLostFrom += lifeLost;
+                    contribution.lifeLost += lifeLost;
                 else
-                    contributions.Add(fullName, new Contribution(totalLifeLostFrom: lifeLost));
+                    contributions.Add(fullName, new Contribution(lifeLost: lifeLost));
             }
         }
 
@@ -52,14 +57,16 @@ namespace Leaderboards
             if (Main.CurrentFrameFlags.AnyActiveBossNPC || contributions.Count == 0)
                 return; // Proceed in execution if client participated in boss battle
 
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
                 ModPacket packet = Mod.GetPacket();
                 packet.Write(contributions.Count);
 
-                foreach (KeyValuePair<string, Contribution> bossContribution in contributions) {
+                foreach (KeyValuePair<string, Contribution> bossContribution in contributions)
+                {
                     packet.Write(bossContribution.Key);
-                    packet.Write(bossContribution.Value.totalDamageTo);
-                    packet.Write(bossContribution.Value.totalLifeLostFrom);
+                    packet.Write(bossContribution.Value.damage);
+                    packet.Write(bossContribution.Value.lifeLost);
                 }
 
                 packet.Send();
