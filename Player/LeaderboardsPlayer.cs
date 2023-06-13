@@ -68,7 +68,9 @@ namespace Leaderboards
                 packet.Send();
             }
 
-            ModContent.GetInstance<LeaderboardSystem>().ShowMyUI();
+            LeaderboardSystem leaderboardSystem = ModContent.GetInstance<LeaderboardSystem>();
+            leaderboardSystem.leaderboard.Clear();
+            leaderboardSystem.ShowMyUI();
             LeaderboardsFunctions.PushContribution(Player);
         }
     }

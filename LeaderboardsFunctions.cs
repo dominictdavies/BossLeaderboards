@@ -1,11 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Leaderboards.UI;
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ModLoader;
 
 namespace Leaderboards
 {
     public static class LeaderboardsFunctions
     {
-        public const int debug = 1;
+        public const int debug = 0;
 
         public static void PushContribution(Player player)
         {
@@ -22,6 +24,7 @@ namespace Leaderboards
                     c: Color.Magenta
                 );
 
+            ModContent.GetInstance<LeaderboardSystem>().leaderboard.AddContribution(player.whoAmI, contribution);
             contribution.Reset();
         }
     }
