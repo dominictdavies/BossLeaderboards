@@ -54,8 +54,8 @@ namespace Leaderboards
 
         public override void PreUpdate()
         {
-            if (Player.whoAmI != Main.myPlayer || !oldAnyActiveBossNPC || Main.CurrentFrameFlags.AnyActiveBossNPC) // Bug for frame perfect death, use something other than oldAnyActiveBossNPC
-                return; // Proceed if my client, boss active last frame, no boss active this frame
+            if (Player.whoAmI != Main.myPlayer || contribution.IsEmpty() || Main.CurrentFrameFlags.AnyActiveBossNPC)
+                return; // Proceed if my client, I have a contribution, no boss active this frame
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
