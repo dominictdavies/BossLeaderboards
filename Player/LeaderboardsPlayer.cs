@@ -1,3 +1,4 @@
+using Leaderboards.UI;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -67,6 +68,7 @@ namespace Leaderboards
                 packet.Send();
             }
 
+            ModContent.GetInstance<LeaderboardSystem>().ShowMyUI();
             LeaderboardsFunctions.PushContribution(Player);
         }
     }

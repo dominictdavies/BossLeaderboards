@@ -8,7 +8,7 @@ namespace Leaderboards.UI
 {
     public class Leaderboard : UIState
     {
-        private UIPanel masterPanel;
+        private DragableUIPanel masterPanel;
         private UIText title;
         private UIPanel closeButton;
         private UIText closeText;
@@ -16,7 +16,7 @@ namespace Leaderboards.UI
 
         public override void OnInitialize()
         {
-            masterPanel = new UIPanel();
+            masterPanel = new DragableUIPanel();
             masterPanel.Width.Set(300, 0);
             masterPanel.Height.Set(300, 0);
             masterPanel.HAlign = masterPanel.VAlign = 0.5f;
