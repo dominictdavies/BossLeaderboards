@@ -8,7 +8,6 @@ namespace Leaderboards
     public partial class LeaderboardsPlayer : ModPlayer
     {
         public Contribution contribution = new();
-        public bool oldAnyActiveBossNPC;
         public int targetOldLife;
         public int playerOldLife;
 
@@ -69,11 +68,6 @@ namespace Leaderboards
             }
 
             LeaderboardsFunctions.PushContribution(Player);
-        }
-
-        public override void PostUpdate()
-        {
-            oldAnyActiveBossNPC = Main.CurrentFrameFlags.AnyActiveBossNPC;
         }
     }
 }
