@@ -1,7 +1,5 @@
-using Leaderboards.UI;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Leaderboards
@@ -50,28 +48,6 @@ namespace Leaderboards
                 return;
 
             contribution.deaths++;
-        }
-
-        public override void PreUpdate()
-        {
-            if (Player.whoAmI != Main.myPlayer || contribution.IsEmpty() || Main.CurrentFrameFlags.AnyActiveBossNPC)
-                return; // Proceed if my client, I have a contribution, no boss active this frame
-
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                ModPacket packet = Mod.GetPacket();
-                packet.Write(contribution.damage);
-                packet.Write(contribution.kills);
-                packet.Write(contribution.lifeLost);
-                packet.Write(contribution.hitsTaken);
-                packet.Write(contribution.deaths);
-                packet.Send();
-            }
-
-            UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
-            leaderboardSystem.leaderboard.Clear();
-            leaderboardSystem.ShowMyUI();
-            LeaderboardsFunctions.PushContribution(Player);
         }
     }
 }

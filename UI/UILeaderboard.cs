@@ -57,8 +57,13 @@ namespace Leaderboards.UI
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
 
-        public void AddContribution(int whoAmI, Contribution contribution)
+        public void PushContribution(int whoAmI)
         {
+            Clear();
+
+            Player player = Main.player[whoAmI];
+            LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
+            Contribution contribution = leaderboardsPlayer.contribution;
             AddCell(leaderColumns["Name"], Main.player[whoAmI].name);
             AddCell(leaderColumns["Damage"], contribution.damage.ToString());
             AddCell(leaderColumns["Kills"], contribution.kills.ToString());

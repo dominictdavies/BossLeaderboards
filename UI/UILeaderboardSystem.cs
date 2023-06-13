@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.ID;
 
 namespace Leaderboards.UI
 {
@@ -36,13 +37,44 @@ namespace Leaderboards.UI
             leaderboard = null;
         }
 
+        private const int PacketTimerMax = 60;
+        private int _packetTimer = 0;
         private GameTime _lastUpdateUiGameTime;
+        private bool _lastAnyActiveBossNPC;
 
         public override void UpdateUI(GameTime gameTime)
         {
-            _lastUpdateUiGameTime = gameTime;
             if (leaderboardInterface?.CurrentState != null)
                 leaderboardInterface.Update(gameTime);
+
+            if (Main.CurrentFrameFlags.AnyActiveBossNPC)
+            {
+                if (Main.netMode == NetmodeID.MultiplayerClient && _packetTimer-- == 0)
+                {
+                    Player myPlayer = Main.player[Main.myPlayer];
+                    LeaderboardsPlayer leaderboardsPlayer = myPlayer.GetModPlayer<LeaderboardsPlayer>();
+                    Contribution contribution = leaderboardsPlayer.contribution;
+                    ModPacket packet = Mod.GetPacket();
+                    packet.Write(contribution.damage);
+                    packet.Write(contribution.kills);
+                    packet.Write(contribution.lifeLost);
+                    packet.Write(contribution.hitsTaken);
+                    packet.Write(contribution.deaths);
+                    packet.Send();
+                    _packetTimer = PacketTimerMax;
+                }
+
+                UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
+                leaderboardSystem.leaderboard.PushContribution(Main.myPlayer);
+            }
+            else if (_lastAnyActiveBossNPC)
+            {
+                UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
+                leaderboardSystem.ShowMyUI();
+            }
+
+            _lastUpdateUiGameTime = gameTime;
+            _lastAnyActiveBossNPC = Main.CurrentFrameFlags.AnyActiveBossNPC;
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)

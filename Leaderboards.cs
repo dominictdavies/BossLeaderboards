@@ -1,3 +1,4 @@
+using Leaderboards.UI;
 using System.IO;
 using Terraria;
 using Terraria.ID;
@@ -32,8 +33,7 @@ namespace Leaderboards
                     reader.ReadInt32(), // hitsTaken
                     reader.ReadInt32()  // deaths
                 );
-
-                LeaderboardsFunctions.PushContribution(contributor);
+                ModContent.GetInstance<UILeaderboardSystem>().leaderboard.PushContribution(contributor.whoAmI);
             }
         }
     }
