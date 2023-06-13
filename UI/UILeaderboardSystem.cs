@@ -8,17 +8,17 @@ namespace Leaderboards.UI
 {
     internal class UILeaderboardSystem : ModSystem
     {
-        internal UserInterface LeaderboardInterface;
+        internal UserInterface leaderboardInterface;
         internal UILeaderboard leaderboard;
 
         internal void ShowMyUI()
         {
-            LeaderboardInterface?.SetState(leaderboard);
+            leaderboardInterface?.SetState(leaderboard);
         }
 
         internal void HideMyUI()
         {
-            LeaderboardInterface?.SetState(null);
+            leaderboardInterface?.SetState(null);
         }
 
         public override void Load()
@@ -26,8 +26,7 @@ namespace Leaderboards.UI
             if (Main.dedServ)
                 return;
 
-            LeaderboardInterface = new UserInterface();
-
+            leaderboardInterface = new UserInterface();
             leaderboard = new UILeaderboard();
             leaderboard.Activate();
         }
@@ -42,31 +41,27 @@ namespace Leaderboards.UI
         public override void UpdateUI(GameTime gameTime)
         {
             _lastUpdateUiGameTime = gameTime;
-            if (LeaderboardInterface?.CurrentState != null)
-            {
-                LeaderboardInterface.Update(gameTime);
-            }
+            if (leaderboardInterface?.CurrentState != null)
+                leaderboardInterface.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-            if (mouseTextIndex != -1)
-            {
-                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
-                    "MyMod: MyInterface",
-                    delegate
-                    {
-                        if (_lastUpdateUiGameTime != null && LeaderboardInterface?.CurrentState != null)
-                        {
-                            LeaderboardInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
-                        }
-                        return true;
-                    },
-                    InterfaceScaleType.UI
-                    )
-                );
-            }
+            if (mouseTextIndex == -1)
+                return;
+
+            layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                "Leaderboards: LeaderboardInterface",
+                delegate
+                {
+                    if (_lastUpdateUiGameTime != null && leaderboardInterface?.CurrentState != null)
+                        leaderboardInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+                    return true;
+                },
+                InterfaceScaleType.UI
+                )
+            );
         }
     }
 }
