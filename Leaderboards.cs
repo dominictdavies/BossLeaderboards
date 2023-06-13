@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace Leaderboards
 {
-    public class Leaderboards : Mod
+    internal class Leaderboards : Mod
     {
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {

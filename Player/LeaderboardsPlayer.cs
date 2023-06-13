@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace Leaderboards
 {
-    public partial class LeaderboardsPlayer : ModPlayer
+    internal partial class LeaderboardsPlayer : ModPlayer
     {
         public Contribution contribution = new();
         public int targetOldLife;

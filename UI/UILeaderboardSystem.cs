@@ -6,7 +6,7 @@ using Terraria.UI;
 
 namespace Leaderboards.UI
 {
-    public class UILeaderboardSystem : ModSystem
+    internal class UILeaderboardSystem : ModSystem
     {
         internal UserInterface LeaderboardInterface;
         internal UILeaderboard leaderboard;

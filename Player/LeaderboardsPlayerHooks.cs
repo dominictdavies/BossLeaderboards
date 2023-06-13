@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace Leaderboards
 {
-    public partial class LeaderboardsPlayer : ModPlayer
+    internal partial class LeaderboardsPlayer : ModPlayer
     {
         public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
             => PreHitNPCWithAnything(target, damage, knockback, crit, item: item);

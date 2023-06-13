@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace Leaderboards
 {
-    public static class LeaderboardsFunctions
+    internal static class LeaderboardsFunctions
     {
         public static int debug = 0;
 

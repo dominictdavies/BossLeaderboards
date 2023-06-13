@@ -8,7 +8,7 @@ using Terraria.ID;
 
 namespace Leaderboards.UI
 {
-    public class UILeaderboard : UIState
+    internal class UILeaderboard : UIState
     {
         private const float masterWidth = 600f;
         private const float masterHeight = 300f;

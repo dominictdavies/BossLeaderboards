@@ -1,6 +1,6 @@
 ﻿namespace Leaderboards
 {
-    public class Contribution
+    internal class Contribution
     {
         public long damage;
         public int kills;
