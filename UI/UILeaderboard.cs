@@ -8,7 +8,7 @@ using Terraria.ID;
 
 namespace Leaderboards.UI
 {
-    public class Leaderboard : UIState
+    public class UILeaderboard : UIState
     {
         private const float masterWidth = 600f;
         private const float masterHeight = 300f;
@@ -20,7 +20,7 @@ namespace Leaderboards.UI
 
         public override void OnInitialize()
         {
-            DragableUIPanel masterPanel = new DragableUIPanel();
+            UIDragablePanel masterPanel = new UIDragablePanel();
             masterPanel.Width.Set(masterWidth, 0);
             masterPanel.Height.Set(masterHeight, 0);
             masterPanel.HAlign = masterPanel.VAlign = 0.5f;
@@ -53,7 +53,7 @@ namespace Leaderboards.UI
 
         private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)
         {
-            ModContent.GetInstance<LeaderboardSystem>().HideMyUI();
+            ModContent.GetInstance<UILeaderboardSystem>().HideMyUI();
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
 

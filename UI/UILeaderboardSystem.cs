@@ -6,10 +6,10 @@ using Terraria.UI;
 
 namespace Leaderboards.UI
 {
-    public class LeaderboardSystem : ModSystem
+    public class UILeaderboardSystem : ModSystem
     {
         internal UserInterface LeaderboardInterface;
-        internal Leaderboard leaderboard;
+        internal UILeaderboard leaderboard;
 
         internal void ShowMyUI()
         {
@@ -28,7 +28,7 @@ namespace Leaderboards.UI
 
             LeaderboardInterface = new UserInterface();
 
-            leaderboard = new Leaderboard();
+            leaderboard = new UILeaderboard();
             leaderboard.Activate();
         }
 
@@ -42,7 +42,8 @@ namespace Leaderboards.UI
         public override void UpdateUI(GameTime gameTime)
         {
             _lastUpdateUiGameTime = gameTime;
-            if (LeaderboardInterface?.CurrentState != null) {
+            if (LeaderboardInterface?.CurrentState != null)
+            {
                 LeaderboardInterface.Update(gameTime);
             }
         }
@@ -50,12 +51,14 @@ namespace Leaderboards.UI
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-            if (mouseTextIndex != -1) {
+            if (mouseTextIndex != -1)
+            {
                 layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
                     "MyMod: MyInterface",
                     delegate
                     {
-                        if (_lastUpdateUiGameTime != null && LeaderboardInterface?.CurrentState != null) {
+                        if (_lastUpdateUiGameTime != null && LeaderboardInterface?.CurrentState != null)
+                        {
                             LeaderboardInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
                         }
                         return true;

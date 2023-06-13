@@ -68,7 +68,7 @@ namespace Leaderboards
                 packet.Send();
             }
 
-            LeaderboardSystem leaderboardSystem = ModContent.GetInstance<LeaderboardSystem>();
+            UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
             leaderboardSystem.leaderboard.Clear();
             leaderboardSystem.ShowMyUI();
             LeaderboardsFunctions.PushContribution(Player);

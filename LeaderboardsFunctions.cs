@@ -24,7 +24,7 @@ namespace Leaderboards
                     c: Color.Magenta
                 );
 
-            ModContent.GetInstance<LeaderboardSystem>().leaderboard.AddContribution(player.whoAmI, contribution);
+            ModContent.GetInstance<UILeaderboardSystem>().leaderboard.AddContribution(player.whoAmI, contribution);
             contribution.Reset();
         }
     }
