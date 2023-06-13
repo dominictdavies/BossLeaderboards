@@ -1,6 +1,5 @@
-﻿using Leaderboards.UI;
-using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,7 +7,7 @@ namespace Leaderboards
 {
     public partial class LeaderboardsPlayer : ModPlayer
     {
-        public Dictionary<string, Contribution> contributions = new();
+        public Contribution contribution = new();
         public int targetOldLife;
         public int playerOldLife;
 
@@ -21,13 +20,11 @@ namespace Leaderboards
                 return;
 
             int damageDealt = target.life > 0 ? targetOldLife - target.life : targetOldLife;
-            if (damageDealt > 0) {
-                if (contributions.TryGetValue(target.FullName, out Contribution contribution)) {
-                    contribution.totalDamageTo += damageDealt;
-                } else {
-                    contributions.Add(target.FullName, new Contribution(totalDamageTo: damageDealt));
-                }
-            }
+            if (damageDealt > 0)
+                contribution.damage += damageDealt;
+
+            if (target.life <= 0 && targetOldLife > 0)
+                contribution.kills++;
         }
 
         public void PreHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
@@ -38,33 +35,35 @@ namespace Leaderboards
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
                 return;
 
-            string fullName = npc != null ? npc.FullName : proj.Name;
             int lifeLost = Player.statLife > 0 ? playerOldLife - Player.statLife : playerOldLife;
-            if (lifeLost > 0) {
-                if (contributions.TryGetValue(fullName, out Contribution contribution))
-                    contribution.totalLifeLostFrom += lifeLost;
-                else
-                    contributions.Add(fullName, new Contribution(totalLifeLostFrom: lifeLost));
+            if (lifeLost > 0)
+            {
+                contribution.lifeLost += lifeLost;
+                contribution.hitsTaken++;
             }
+        }
+
+        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+        {
+            if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
+                return;
+
+            contribution.deaths++;
         }
 
         public override void PreUpdate()
         {
-            if (Main.CurrentFrameFlags.AnyActiveBossNPC || contributions.Count == 0)
-                return; // Proceed in execution if client participated in boss battle
+            if (Player.whoAmI != Main.myPlayer || contribution.IsEmpty() || Main.CurrentFrameFlags.AnyActiveBossNPC)
+                return; // Proceed if my client, I have a contribution, no boss active this frame
 
-            ModContent.GetInstance<LeaderboardSystem>().ShowMyUI();
-
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
                 ModPacket packet = Mod.GetPacket();
-                packet.Write(contributions.Count);
-
-                foreach (KeyValuePair<string, Contribution> bossContribution in contributions) {
-                    packet.Write(bossContribution.Key);
-                    packet.Write(bossContribution.Value.totalDamageTo);
-                    packet.Write(bossContribution.Value.totalLifeLostFrom);
-                }
-
+                packet.Write(contribution.damage);
+                packet.Write(contribution.kills);
+                packet.Write(contribution.lifeLost);
+                packet.Write(contribution.hitsTaken);
+                packet.Write(contribution.deaths);
                 packet.Send();
             }
 
