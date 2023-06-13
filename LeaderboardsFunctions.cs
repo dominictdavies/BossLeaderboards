@@ -7,7 +7,7 @@ namespace Leaderboards
 {
     public static class LeaderboardsFunctions
     {
-        public const int debug = 0;
+        public static int debug = 0;
 
         public static void PushContribution(Player player)
         {
