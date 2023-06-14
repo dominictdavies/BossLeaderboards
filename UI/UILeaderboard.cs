@@ -16,7 +16,7 @@ namespace Leaderboards.UI
         private const float leaderHeight = masterHeight - 80f;
         private const int columns = 6;
         private UIPanel leaderPanel;
-        private Dictionary<string, UIList> leaderColumns = new();
+        private Dictionary<UIList, List<UIText>> columnCells = new();
 
         public override void OnInitialize()
         {
@@ -59,24 +59,39 @@ namespace Leaderboards.UI
 
         public void PushContribution(int whoAmI)
         {
-            Clear();
+            if (columnCells.Count == 0)
+                AddColumns();
 
             Player player = Main.player[whoAmI];
             LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
             Contribution contribution = leaderboardsPlayer.contribution;
-            AddCell(leaderColumns["Name"], Main.player[whoAmI].name);
-            AddCell(leaderColumns["Damage"], contribution.damage.ToString());
-            AddCell(leaderColumns["Kills"], contribution.kills.ToString());
-            AddCell(leaderColumns["Life Lost"], contribution.lifeLost.ToString());
-            AddCell(leaderColumns["Hits Taken"], contribution.hitsTaken.ToString());
-            AddCell(leaderColumns["Deaths"], contribution.deaths.ToString());
-        }
+            foreach (KeyValuePair<UIList, List<UIText>> pair in columnCells)
+            {
+                UIList column = pair.Key;
+                List<UIText> cells = pair.Value;
 
-        public void Clear()
-        {
-            leaderPanel.RemoveAllChildren();
-            leaderColumns.Clear();
-            AddColumns();
+                switch (cells[0].Text)
+                {
+                    case "Name":
+                        cells[1].SetText(player.name);
+                        break;
+                    case "Damage":
+                        cells[1].SetText(contribution.damage.ToString());
+                        break;
+                    case "Kills":
+                        cells[1].SetText(contribution.kills.ToString());
+                        break;
+                    case "Life Lost":
+                        cells[1].SetText(contribution.lifeLost.ToString());
+                        break;
+                    case "Hits Taken":
+                        cells[1].SetText(contribution.hitsTaken.ToString());
+                        break;
+                    case "Deaths":
+                        cells[1].SetText(contribution.deaths.ToString());
+                        break;
+                }
+            }
         }
 
         private void AddColumns()
@@ -87,6 +102,43 @@ namespace Leaderboards.UI
             AddColumn("Life Lost");
             AddColumn("Hits Taken");
             AddColumn("Deaths");
+
+            foreach (Player player in Main.player)
+            {
+                if (!player.active)
+                    continue;
+
+                LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
+                Contribution contribution = leaderboardsPlayer.contribution;
+
+                foreach (KeyValuePair<UIList, List<UIText>> pair in columnCells)
+                {
+                    UIList column = pair.Key;
+                    List<UIText> cells = pair.Value;
+
+                    switch (cells[0].Text)
+                    {
+                        case "Name":
+                            AddCell(column, player.name);
+                            break;
+                        case "Damage":
+                            AddCell(column, contribution.damage.ToString());
+                            break;
+                        case "Kills":
+                            AddCell(column, contribution.kills.ToString());
+                            break;
+                        case "Life Lost":
+                            AddCell(column, contribution.lifeLost.ToString());
+                            break;
+                        case "Hits Taken":
+                            AddCell(column, contribution.hitsTaken.ToString());
+                            break;
+                        case "Deaths":
+                            AddCell(column, contribution.deaths.ToString());
+                            break;
+                    }
+                }
+            }
         }
 
         private void AddColumn(string heading)
@@ -94,10 +146,11 @@ namespace Leaderboards.UI
             UIList column = new UIList();
             column.Width.Set(leaderWidth / columns, 0);
             column.Height.Set(leaderHeight, 0);
-            column.HAlign = 1f / (float)(columns - 1) * (float)leaderColumns.Count;
+            column.HAlign = 1f / (float)(columns - 1) * (float)columnCells.Count;
             leaderPanel.Append(column);
+
+            columnCells.Add(column, new List<UIText>());
             AddCell(column, heading);
-            leaderColumns.Add(heading, column);
         }
 
         private void AddCell(UIList column, string text)
@@ -105,6 +158,7 @@ namespace Leaderboards.UI
             UIText cell = new UIText(text);
             cell.HAlign = 0.5f;
             column.Add(cell);
+            columnCells[column].Add(cell);
         }
     }
 }
