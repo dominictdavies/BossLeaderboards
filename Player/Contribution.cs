@@ -27,14 +27,5 @@
             this.hitsTaken = Default.hitsTaken;
             this.deaths = Default.deaths;
         }
-
-        public bool IsEmpty()
-        {
-            return this.damage == Default.damage &&
-                   this.kills == Default.kills &&
-                   this.lifeLost == Default.lifeLost &&
-                   this.hitsTaken == Default.hitsTaken &&
-                   this.deaths == Default.deaths;
-        }
     }
 }

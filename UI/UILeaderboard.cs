@@ -14,7 +14,7 @@ namespace Leaderboards.UI
         private const float masterHeight = 300f;
         private const float leaderWidth = masterWidth - 20f;
         private const float leaderHeight = masterHeight - 80f;
-        private const int columns = 6;
+        public static string[] Headings = { "Name", "Damage", "Kills", "Life Lost", "Hits Taken", "Deaths" };
         private UIPanel leaderPanel;
         private Dictionary<UIList, List<UIText>> columnCells = new();
 
@@ -57,51 +57,13 @@ namespace Leaderboards.UI
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
 
-        public void PushContribution(int whoAmI)
+        public void FillCells()
         {
             if (columnCells.Count == 0)
-                AddColumns();
-
-            Player player = Main.player[whoAmI];
-            LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-            Contribution contribution = leaderboardsPlayer.contribution;
-            foreach (KeyValuePair<UIList, List<UIText>> pair in columnCells)
-            {
-                UIList column = pair.Key;
-                List<UIText> cells = pair.Value;
-
-                switch (cells[0].Text)
-                {
-                    case "Name":
-                        cells[1].SetText(player.name);
-                        break;
-                    case "Damage":
-                        cells[1].SetText(contribution.damage.ToString());
-                        break;
-                    case "Kills":
-                        cells[1].SetText(contribution.kills.ToString());
-                        break;
-                    case "Life Lost":
-                        cells[1].SetText(contribution.lifeLost.ToString());
-                        break;
-                    case "Hits Taken":
-                        cells[1].SetText(contribution.hitsTaken.ToString());
-                        break;
-                    case "Deaths":
-                        cells[1].SetText(contribution.deaths.ToString());
-                        break;
-                }
-            }
-        }
-
-        private void AddColumns()
-        {
-            AddColumn("Name");
-            AddColumn("Damage");
-            AddColumn("Kills");
-            AddColumn("Life Lost");
-            AddColumn("Hits Taken");
-            AddColumn("Deaths");
+                foreach (string heading in Headings)
+                    AddColumn(heading);
+            else
+                ClearCells();
 
             foreach (Player player in Main.player)
             {
@@ -116,7 +78,7 @@ namespace Leaderboards.UI
                     UIList column = pair.Key;
                     List<UIText> cells = pair.Value;
 
-                    switch (cells[0].Text)
+                    switch (((UIText)column._items[0]).Text)
                     {
                         case "Name":
                             AddCell(column, player.name);
@@ -141,18 +103,31 @@ namespace Leaderboards.UI
             }
         }
 
+        private void ClearCells()
+        {
+            foreach (KeyValuePair<UIList, List<UIText>> pair in columnCells)
+            {
+                UIList column = pair.Key;
+                List<UIText> cells = pair.Value;
+
+                foreach (UIText cell in cells)
+                    column.RemoveChild(cell);
+                cells.Clear();
+            }
+        }
+
         private void AddColumn(string heading)
         {
             UIList column = new UIList();
-            column.Width.Set(leaderWidth / columns, 0);
+            column.Width.Set(leaderWidth / Headings.Length, 0);
             column.Height.Set(leaderHeight, 0);
-            column.HAlign = 1f / (float)(columns - 1) * (float)columnCells.Count;
+            column.HAlign = 1f / (float)(Headings.Length - 1) * (float)columnCells.Count;
             leaderPanel.Append(column);
 
             UIText headingText = new UIText(heading);
             headingText.HAlign = 0.5f;
             column.Add(headingText);
-            columnCells.Add(column, new());
+            columnCells.Add(column, new List<UIText>());
         }
 
         private void AddCell(UIList column, string text)

@@ -65,7 +65,7 @@ namespace Leaderboards.UI
                 }
 
                 UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
-                leaderboardSystem.leaderboard.PushContribution(Main.myPlayer);
+                leaderboardSystem.leaderboard.FillCells();
             }
             else if (_lastAnyActiveBossNPC)
             {
