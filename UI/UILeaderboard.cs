@@ -149,8 +149,10 @@ namespace Leaderboards.UI
             column.HAlign = 1f / (float)(columns - 1) * (float)columnCells.Count;
             leaderPanel.Append(column);
 
-            columnCells.Add(column, new List<UIText>());
-            AddCell(column, heading);
+            UIText headingText = new UIText(heading);
+            headingText.HAlign = 0.5f;
+            column.Add(headingText);
+            columnCells.Add(column, new());
         }
 
         private void AddCell(UIList column, string text)
