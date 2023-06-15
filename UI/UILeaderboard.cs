@@ -16,7 +16,7 @@ namespace Leaderboards.UI
         private const float leaderHeight = masterHeight - 80f;
         public static string[] Headings = { "Name", "Damage", "Kills", "Life Lost", "Hits Taken", "Deaths" };
         private UIPanel leaderPanel;
-        private Dictionary<UIList, List<UIText>> columnCells = new();
+        private List<UIList> columns = new();
 
         public override void OnInitialize()
         {
@@ -59,11 +59,10 @@ namespace Leaderboards.UI
 
         public void FillCells()
         {
-            if (columnCells.Count == 0)
-                foreach (string heading in Headings)
-                    AddColumn(heading);
+            if (columns.Count == 0)
+                AddColumns();
             else
-                ClearCells();
+                ClearColumns();
 
             foreach (Player player in Main.player)
             {
@@ -73,11 +72,8 @@ namespace Leaderboards.UI
                 LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
                 Contribution contribution = leaderboardsPlayer.contribution;
 
-                foreach (KeyValuePair<UIList, List<UIText>> pair in columnCells)
+                foreach (UIList column in columns)
                 {
-                    UIList column = pair.Key;
-                    List<UIText> cells = pair.Value;
-
                     switch (((UIText)column._items[0]).Text)
                     {
                         case "Name":
@@ -103,17 +99,17 @@ namespace Leaderboards.UI
             }
         }
 
-        private void ClearCells()
+        private void AddColumns()
         {
-            foreach (KeyValuePair<UIList, List<UIText>> pair in columnCells)
-            {
-                UIList column = pair.Key;
-                List<UIText> cells = pair.Value;
+            foreach (string heading in Headings)
+                AddColumn(heading);
+        }
 
-                foreach (UIText cell in cells)
-                    column.RemoveChild(cell);
-                cells.Clear();
-            }
+        private void ClearColumns()
+        {
+            foreach (UIList column in columns)
+                for (int i = 1; i < column.Count; i++)
+                    column.Remove(column._items[i]);
         }
 
         private void AddColumn(string heading)
@@ -121,13 +117,13 @@ namespace Leaderboards.UI
             UIList column = new UIList();
             column.Width.Set(leaderWidth / Headings.Length, 0);
             column.Height.Set(leaderHeight, 0);
-            column.HAlign = 1f / (float)(Headings.Length - 1) * (float)columnCells.Count;
+            column.HAlign = 1f / (float)(Headings.Length - 1) * (float)columns.Count;
             leaderPanel.Append(column);
 
             UIText headingText = new UIText(heading);
             headingText.HAlign = 0.5f;
             column.Add(headingText);
-            columnCells.Add(column, new List<UIText>());
+            columns.Add(column);
         }
 
         private void AddCell(UIList column, string text)
@@ -135,7 +131,6 @@ namespace Leaderboards.UI
             UIText cell = new UIText(text);
             cell.HAlign = 0.5f;
             column.Add(cell);
-            columnCells[column].Add(cell);
         }
     }
 }

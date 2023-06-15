@@ -49,10 +49,18 @@ namespace Leaderboards.UI
 
             if (Main.CurrentFrameFlags.AnyActiveBossNPC)
             {
+                Player player = Main.player[Main.myPlayer];
+                LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
+
+                if (!_lastAnyActiveBossNPC)
+                    leaderboardsPlayer.contribution = new Contribution();
+
+                UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
+                UILeaderboard leaderboard = leaderboardSystem.leaderboard;
+                leaderboard.FillCells();
+
                 if (Main.netMode == NetmodeID.MultiplayerClient && _packetTimer-- == 0)
                 {
-                    Player myPlayer = Main.player[Main.myPlayer];
-                    LeaderboardsPlayer leaderboardsPlayer = myPlayer.GetModPlayer<LeaderboardsPlayer>();
                     Contribution contribution = leaderboardsPlayer.contribution;
                     ModPacket packet = Mod.GetPacket();
                     packet.Write(contribution.damage);
@@ -63,9 +71,6 @@ namespace Leaderboards.UI
                     packet.Send();
                     _packetTimer = PacketTimerMax;
                 }
-
-                UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
-                leaderboardSystem.leaderboard.FillCells();
             }
             else if (_lastAnyActiveBossNPC)
             {
