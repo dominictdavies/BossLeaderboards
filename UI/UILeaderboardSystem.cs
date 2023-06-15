@@ -39,8 +39,8 @@ namespace Leaderboards.UI
 
         private const int PacketTimerMax = 60;
         private int _packetTimer = 0;
+        private bool _lastAnyActiveBossNPC = false;
         private GameTime _lastUpdateUiGameTime;
-        private bool _lastAnyActiveBossNPC;
 
         public override void UpdateUI(GameTime gameTime)
         {
@@ -49,9 +49,7 @@ namespace Leaderboards.UI
 
             if (Main.CurrentFrameFlags.AnyActiveBossNPC)
             {
-                Player player = Main.player[Main.myPlayer];
-                LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-
+                LeaderboardsPlayer leaderboardsPlayer = Main.player[Main.myPlayer].GetModPlayer<LeaderboardsPlayer>();
                 if (!_lastAnyActiveBossNPC) // Boss just spawned
                     leaderboardsPlayer.contribution = new Contribution();
 
@@ -72,8 +70,8 @@ namespace Leaderboards.UI
                 leaderboardSystem.ShowMyUI();
             }
 
-            _lastUpdateUiGameTime = gameTime;
             _lastAnyActiveBossNPC = Main.CurrentFrameFlags.AnyActiveBossNPC;
+            _lastUpdateUiGameTime = gameTime;
         }
 
         private void SendContribution()
