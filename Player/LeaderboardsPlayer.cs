@@ -6,9 +6,9 @@ namespace Leaderboards
 {
     internal partial class LeaderboardsPlayer : ModPlayer
     {
+        private int targetOldLife;
+        private int playerOldLife;
         public Contribution contribution = new();
-        public int targetOldLife;
-        public int playerOldLife;
 
         public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
             => targetOldLife = target.life;

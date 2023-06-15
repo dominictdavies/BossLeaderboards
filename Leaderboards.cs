@@ -23,7 +23,7 @@ namespace Leaderboards
             }
             else if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                // Push received contribution
+                // Update player's contribution
                 Player contributor = Main.player[reader.ReadByte()]; // whoAmI
                 contributor.GetModPlayer<LeaderboardsPlayer>().contribution = new(
                     reader.ReadInt64(), // damage
