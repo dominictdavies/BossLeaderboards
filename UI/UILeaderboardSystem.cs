@@ -37,7 +37,7 @@ namespace Leaderboards.UI
             leaderboard = null;
         }
 
-        private const int PacketTimerMax = 60;
+        private const int PacketTimerMax = 30;
         private int _packetTimer = 0;
         private bool _lastAnyActiveBossNPC = false;
         private GameTime _lastUpdateUiGameTime;
@@ -65,7 +65,8 @@ namespace Leaderboards.UI
             }
             else if (_lastAnyActiveBossNPC) // Boss just died
             {
-                SendContribution();
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    SendContribution();
                 UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
                 leaderboardSystem.ShowMyUI();
             }

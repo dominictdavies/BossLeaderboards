@@ -108,7 +108,7 @@ namespace Leaderboards.UI
         private void ClearColumns()
         {
             foreach (UIList column in columns)
-                for (int i = 1; i < column.Count; i++)
+                for (int i = column.Count - 1; i > 0; i--)
                     column.Remove(column._items[i]);
         }
 
