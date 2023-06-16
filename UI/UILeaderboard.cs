@@ -10,19 +10,19 @@ namespace Leaderboards.UI
 {
     internal class UILeaderboard : UIState
     {
-        private const float _masterWidth = 600f;
-        private const float _masterHeight = 300f;
-        private const float _leaderWidth = _masterWidth - 20f;
-        private const float _leaderHeight = _masterHeight - 80f;
-        private UIPanel _leaderPanel;
-        private List<UIList> _columns = new();
+        private const float _masterPanelWidth = 600f;
+        private const float _masterPanelHeight = 300f;
+        private const float _dataPanelWidth = _masterPanelWidth - 20f;
+        private const float _dataPanelHeight = _masterPanelHeight - 80f;
+        private UIPanel _dataPanel;
+        private Dictionary<int, Dictionary<string, UIText>> data = new();
         private string[] _headings = { "Name", "Damage", "Kills", "Life Lost", "Hits Taken", "Deaths" };
 
         public override void OnInitialize()
         {
             UIDragablePanel masterPanel = new UIDragablePanel();
-            masterPanel.Width.Set(_masterWidth, 0);
-            masterPanel.Height.Set(_masterHeight, 0);
+            masterPanel.Width.Set(_masterPanelWidth, 0);
+            masterPanel.Height.Set(_masterPanelHeight, 0);
             masterPanel.HAlign = masterPanel.VAlign = 0.5f;
             Append(masterPanel);
 
@@ -43,12 +43,12 @@ namespace Leaderboards.UI
             closeText.HAlign = closeText.VAlign = 0.5f;
             closeButton.Append(closeText);
 
-            _leaderPanel = new UIPanel();
-            _leaderPanel.Width.Set(_leaderWidth, 0);
-            _leaderPanel.Height.Set(_leaderHeight, 0);
-            _leaderPanel.Top.Set(55, 0);
-            _leaderPanel.HAlign = 0.5f;
-            masterPanel.Append(_leaderPanel);
+            _dataPanel = new UIPanel();
+            _dataPanel.Width.Set(_dataPanelWidth, 0);
+            _dataPanel.Height.Set(_dataPanelHeight, 0);
+            _dataPanel.Top.Set(55, 0);
+            _dataPanel.HAlign = 0.5f;
+            masterPanel.Append(_dataPanel);
         }
 
         private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)
@@ -115,10 +115,10 @@ namespace Leaderboards.UI
         private void AddColumn(string heading)
         {
             UIList column = new UIList();
-            column.Width.Set(_leaderWidth / _headings.Length, 0);
-            column.Height.Set(_leaderHeight, 0);
+            column.Width.Set(_dataPanelWidth / _headings.Length, 0);
+            column.Height.Set(_dataPanelHeight, 0);
             column.HAlign = 1f / (float)(_headings.Length - 1) * (float)_columns.Count;
-            _leaderPanel.Append(column);
+            _dataPanel.Append(column);
 
             UIText headingText = new UIText(heading);
             headingText.HAlign = 0.5f;
