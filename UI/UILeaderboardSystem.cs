@@ -55,7 +55,7 @@ namespace Leaderboards.UI
 
                 UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
                 UILeaderboard leaderboard = leaderboardSystem.leaderboard;
-                leaderboard.FillCells();
+                leaderboard.UpdateCells();
 
                 if (Main.netMode == NetmodeID.MultiplayerClient && _packetTimer-- == 0)
                 {

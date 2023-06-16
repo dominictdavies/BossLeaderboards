@@ -10,19 +10,19 @@ namespace Leaderboards.UI
 {
     internal class UILeaderboard : UIState
     {
-        private const float masterWidth = 600f;
-        private const float masterHeight = 300f;
-        private const float leaderWidth = masterWidth - 20f;
-        private const float leaderHeight = masterHeight - 80f;
-        public static string[] Headings = { "Name", "Damage", "Kills", "Life Lost", "Hits Taken", "Deaths" };
-        private UIPanel leaderPanel;
-        private List<UIList> columns = new();
+        private const float _masterWidth = 600f;
+        private const float _masterHeight = 300f;
+        private const float _leaderWidth = _masterWidth - 20f;
+        private const float _leaderHeight = _masterHeight - 80f;
+        private UIPanel _leaderPanel;
+        private List<UIList> _columns = new();
+        private string[] _headings = { "Name", "Damage", "Kills", "Life Lost", "Hits Taken", "Deaths" };
 
         public override void OnInitialize()
         {
             UIDragablePanel masterPanel = new UIDragablePanel();
-            masterPanel.Width.Set(masterWidth, 0);
-            masterPanel.Height.Set(masterHeight, 0);
+            masterPanel.Width.Set(_masterWidth, 0);
+            masterPanel.Height.Set(_masterHeight, 0);
             masterPanel.HAlign = masterPanel.VAlign = 0.5f;
             Append(masterPanel);
 
@@ -43,12 +43,12 @@ namespace Leaderboards.UI
             closeText.HAlign = closeText.VAlign = 0.5f;
             closeButton.Append(closeText);
 
-            leaderPanel = new UIPanel();
-            leaderPanel.Width.Set(leaderWidth, 0);
-            leaderPanel.Height.Set(leaderHeight, 0);
-            leaderPanel.Top.Set(55, 0);
-            leaderPanel.HAlign = 0.5f;
-            masterPanel.Append(leaderPanel);
+            _leaderPanel = new UIPanel();
+            _leaderPanel.Width.Set(_leaderWidth, 0);
+            _leaderPanel.Height.Set(_leaderHeight, 0);
+            _leaderPanel.Top.Set(55, 0);
+            _leaderPanel.HAlign = 0.5f;
+            masterPanel.Append(_leaderPanel);
         }
 
         private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)
@@ -57,9 +57,9 @@ namespace Leaderboards.UI
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
 
-        public void FillCells()
+        public void UpdateCells()
         {
-            if (columns.Count == 0)
+            if (_columns.Count == 0)
                 AddColumns();
             else
                 ClearColumns();
@@ -72,7 +72,7 @@ namespace Leaderboards.UI
                 LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
                 Contribution contribution = leaderboardsPlayer.contribution;
 
-                foreach (UIList column in columns)
+                foreach (UIList column in _columns)
                 {
                     switch (((UIText)column._items[0]).Text)
                     {
@@ -99,31 +99,31 @@ namespace Leaderboards.UI
             }
         }
 
-        private void AddColumns()
-        {
-            foreach (string heading in Headings)
-                AddColumn(heading);
-        }
-
         private void ClearColumns()
         {
-            foreach (UIList column in columns)
+            foreach (UIList column in _columns)
                 for (int i = column.Count - 1; i > 0; i--)
                     column.Remove(column._items[i]);
+        }
+
+        private void AddColumns()
+        {
+            foreach (string heading in _headings)
+                AddColumn(heading);
         }
 
         private void AddColumn(string heading)
         {
             UIList column = new UIList();
-            column.Width.Set(leaderWidth / Headings.Length, 0);
-            column.Height.Set(leaderHeight, 0);
-            column.HAlign = 1f / (float)(Headings.Length - 1) * (float)columns.Count;
-            leaderPanel.Append(column);
+            column.Width.Set(_leaderWidth / _headings.Length, 0);
+            column.Height.Set(_leaderHeight, 0);
+            column.HAlign = 1f / (float)(_headings.Length - 1) * (float)_columns.Count;
+            _leaderPanel.Append(column);
 
             UIText headingText = new UIText(heading);
             headingText.HAlign = 0.5f;
             column.Add(headingText);
-            columns.Add(column);
+            _columns.Add(column);
         }
 
         private void AddCell(UIList column, string text)
