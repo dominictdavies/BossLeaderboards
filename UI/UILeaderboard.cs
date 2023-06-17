@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
@@ -11,6 +10,7 @@ namespace Leaderboards.UI
 {
     internal class UILeaderboard : UIState
     {
+        public static string[] Stats = { "Damage", "Kills", "Life Lost", "Hits Taken", "Deaths" };
         private const float _masterPanelWidth = 600f;
         private const float _masterPanelHeight = 300f;
         private const float _dataPanelWidth = _masterPanelWidth - 20f;
@@ -59,42 +59,36 @@ namespace Leaderboards.UI
 
         public void AddPlayer(int whoAmI)
         {
-            RemovePlayer(whoAmI);
-
             int row = _data.Count;
             Dictionary<string, UIText> playerData = new();
             _data.Add(whoAmI, playerData);
 
             Player player = Main.player[whoAmI];
             LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-            Dictionary<string, long> contribution = leaderboardsPlayer.contribution;
-            string[] statNames = contribution.Keys.ToArray();
-            for (int column = 0; column < statNames.Length; column++)
+            Contribution contribution = leaderboardsPlayer.contribution;
+            for (int column = 0; column < Stats.Length; column++)
             {
-                string name = statNames[column];
-                UIText stat = new UIText(contribution[name].ToString());
-                stat.VAlign = 0.1f * row;
-                stat.HAlign = 1f / statNames.Length * ((float)column + 0.5f);
-                _dataPanel.Append(stat);
-                playerData.Add(name, stat);
+                string name = Stats[column];
+                UIText statText = new UIText(contribution.GetStat(name).ToString());
+                statText.VAlign = 0.1f * row;
+                statText.HAlign = 1f / Stats.Length * ((float)column + 0.5f);
+                _dataPanel.Append(statText);
+                playerData.Add(name, statText);
             }
         }
 
-        public void RemovePlayer(int whoAmI)
-        {
-            if (!_data.ContainsKey(whoAmI))
-                return;
-
-            Dictionary<string, UIText> playerData = _data[whoAmI];
-            foreach (UIText stat in playerData.Values)
-                _dataPanel.RemoveChild(stat);
-
-            _data.Remove(whoAmI);
-        }
-
-        public void UpdateCell(int whoAmI, string statName, long value)
+        public void UpdateCell(int whoAmI, string statName, object value)
         {
             _data[whoAmI][statName].SetText(value.ToString());
+        }
+
+        public void ClearData()
+        {
+            _dataPanel.RemoveAllChildren();
+            _data.Clear();
+            UIText awaitingText = new UIText("Awaiting boss fight...");
+            awaitingText.HAlign = awaitingText.VAlign = 0.5f;
+            _dataPanel.Append(awaitingText);
         }
     }
 }
