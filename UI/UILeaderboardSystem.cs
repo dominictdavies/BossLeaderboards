@@ -37,8 +37,8 @@ namespace Leaderboards.UI
             leaderboard = null;
         }
 
-        private const int PacketTimerMax = 30;
-        private int _packetTimer = 0;
+        // private const int PacketTimerMax = 30;
+        // private int _packetTimer = 0;
         private bool _lastAnyActiveBossNPC = false;
         private GameTime _lastUpdateUiGameTime;
 
@@ -49,20 +49,32 @@ namespace Leaderboards.UI
 
             if (Main.CurrentFrameFlags.AnyActiveBossNPC)
             {
-                LeaderboardsPlayer leaderboardsPlayer = Main.player[Main.myPlayer].GetModPlayer<LeaderboardsPlayer>();
-                // if (!_lastAnyActiveBossNPC) // Boss just spawned
-                //     leaderboardsPlayer.contribution = new Contribution();
-
-                if (Main.netMode == NetmodeID.MultiplayerClient && _packetTimer-- == 0)
+                if (!_lastAnyActiveBossNPC) // Boss just spawned
                 {
-                    SendContribution();
-                    _packetTimer = PacketTimerMax;
+                    leaderboard.ClearData();
+
+                    foreach (Player player in Main.player)
+                    {
+                        if (!player.active)
+                            continue;
+
+                        LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
+                        leaderboardsPlayer.contribution = new Contribution(player.whoAmI);
+                        leaderboardsPlayer.contribution.AddThisPlayer();
+                    }
                 }
+
+                // if (Main.netMode == NetmodeID.MultiplayerClient && _packetTimer-- == 0)
+                // {
+                //     SendContribution();
+                //     _packetTimer = PacketTimerMax;
+                // }
             }
             else if (_lastAnyActiveBossNPC) // Boss just died
             {
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    SendContribution();
+                // if (Main.netMode == NetmodeID.MultiplayerClient)
+                //     SendContribution();
+
                 UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
                 leaderboardSystem.ShowMyUI();
             }
