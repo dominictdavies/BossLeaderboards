@@ -10,7 +10,7 @@ namespace Leaderboards
     {
         private int targetOldLife;
         private int playerOldLife;
-        public Dictionary<string, int> contribution = new() {
+        public Dictionary<string, long> contribution = new() {
             { "Damage", 0 },
             { "Kills", 0 },
             { "Life Lost", 0 },
@@ -36,13 +36,16 @@ namespace Leaderboards
             if (Main.dedServ)
                 return;
 
-            // Update other players' UI
+            UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
+            UILeaderboard leaderboard = leaderboardSystem.leaderboard;
+            leaderboard.RemovePlayer(player.whoAmI);
         }
 
         private void UpdateContribution(string statName, int value)
         {
-            contribution[statName] = value;
-            // SendContribution();
+            contribution[statName] += value;
+            UILeaderboard leaderboard = ModContent.GetInstance<UILeaderboardSystem>().leaderboard;
+            leaderboard.UpdateCell(Player.whoAmI, statName, contribution[statName]);
         }
 
         public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
@@ -55,10 +58,10 @@ namespace Leaderboards
 
             int damageDealt = target.life > 0 ? targetOldLife - target.life : targetOldLife;
             if (damageDealt > 0)
-                contribution["Damage"] += damageDealt;
+                UpdateContribution("Damage", damageDealt);
 
             if (target.life <= 0 && targetOldLife > 0)
-                contribution["Kills"]++;
+                UpdateContribution("Kills", 1);
         }
 
         public void PreHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
@@ -72,8 +75,8 @@ namespace Leaderboards
             int lifeLost = Player.statLife > 0 ? playerOldLife - Player.statLife : playerOldLife;
             if (lifeLost > 0)
             {
-                contribution["Life Lost"] += lifeLost;
-                contribution["Hits Taken"]++;
+                UpdateContribution("Life Lost", lifeLost);
+                UpdateContribution("Hits Taken", 1);
             }
         }
 
@@ -82,7 +85,7 @@ namespace Leaderboards
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
                 return;
 
-            contribution["Deaths"]++;
+            UpdateContribution("Deaths", 1);
         }
     }
 }

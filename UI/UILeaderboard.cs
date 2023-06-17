@@ -51,32 +51,30 @@ namespace Leaderboards.UI
             masterPanel.Append(_dataPanel);
         }
 
-        private int playerTestWhoAmI = 5;
-
         private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)
         {
-            // ModContent.GetInstance<UILeaderboardSystem>().HideMyUI();
+            ModContent.GetInstance<UILeaderboardSystem>().HideMyUI();
             SoundEngine.PlaySound(SoundID.MenuClose);
-
-            AddPlayer(playerTestWhoAmI++);
         }
 
         public void AddPlayer(int whoAmI)
         {
+            RemovePlayer(whoAmI);
+
             int row = _data.Count;
             Dictionary<string, UIText> playerData = new();
             _data.Add(whoAmI, playerData);
 
             Player player = Main.player[whoAmI];
             LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-            Dictionary<string, int> contribution = leaderboardsPlayer.contribution;
-            string[] names = contribution.Keys.ToArray();
-            for (int column = 0; column < names.Length; column++)
+            Dictionary<string, long> contribution = leaderboardsPlayer.contribution;
+            string[] statNames = contribution.Keys.ToArray();
+            for (int column = 0; column < statNames.Length; column++)
             {
-                string name = names[column];
+                string name = statNames[column];
                 UIText stat = new UIText(contribution[name].ToString());
                 stat.VAlign = 0.1f * row;
-                stat.HAlign = 1f / names.Length * ((float)column + 0.5f);
+                stat.HAlign = 1f / statNames.Length * ((float)column + 0.5f);
                 _dataPanel.Append(stat);
                 playerData.Add(name, stat);
             }
@@ -84,6 +82,19 @@ namespace Leaderboards.UI
 
         public void RemovePlayer(int whoAmI)
         {
+            if (!_data.ContainsKey(whoAmI))
+                return;
+
+            Dictionary<string, UIText> playerData = _data[whoAmI];
+            foreach (UIText stat in playerData.Values)
+                _dataPanel.RemoveChild(stat);
+
+            _data.Remove(whoAmI);
+        }
+
+        public void UpdateCell(int whoAmI, string statName, long value)
+        {
+            _data[whoAmI][statName].SetText(value.ToString());
         }
     }
 }
