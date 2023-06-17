@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
@@ -15,8 +16,7 @@ namespace Leaderboards.UI
         private const float _dataPanelWidth = _masterPanelWidth - 20f;
         private const float _dataPanelHeight = _masterPanelHeight - 80f;
         private UIPanel _dataPanel;
-        private Dictionary<int, Dictionary<string, UIText>> data = new();
-        private string[] _headings = { "Name", "Damage", "Kills", "Life Lost", "Hits Taken", "Deaths" };
+        private Dictionary<int, Dictionary<string, UIText>> _data = new();
 
         public override void OnInitialize()
         {
@@ -51,86 +51,39 @@ namespace Leaderboards.UI
             masterPanel.Append(_dataPanel);
         }
 
+        private int playerTestWhoAmI = 5;
+
         private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)
         {
-            ModContent.GetInstance<UILeaderboardSystem>().HideMyUI();
+            // ModContent.GetInstance<UILeaderboardSystem>().HideMyUI();
             SoundEngine.PlaySound(SoundID.MenuClose);
+
+            AddPlayer(playerTestWhoAmI++);
         }
 
-        public void UpdateCells()
+        public void AddPlayer(int whoAmI)
         {
-            if (_columns.Count == 0)
-                AddColumns();
-            else
-                ClearColumns();
+            int row = _data.Count;
+            Dictionary<string, UIText> playerData = new();
+            _data.Add(whoAmI, playerData);
 
-            foreach (Player player in Main.player)
+            Player player = Main.player[whoAmI];
+            LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
+            Dictionary<string, int> contribution = leaderboardsPlayer.contribution;
+            string[] names = contribution.Keys.ToArray();
+            for (int column = 0; column < names.Length; column++)
             {
-                if (!player.active)
-                    continue;
-
-                LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-                Contribution contribution = leaderboardsPlayer.contribution;
-
-                foreach (UIList column in _columns)
-                {
-                    switch (((UIText)column._items[0]).Text)
-                    {
-                        case "Name":
-                            AddCell(column, player.name);
-                            break;
-                        case "Damage":
-                            AddCell(column, contribution.damage.ToString());
-                            break;
-                        case "Kills":
-                            AddCell(column, contribution.kills.ToString());
-                            break;
-                        case "Life Lost":
-                            AddCell(column, contribution.lifeLost.ToString());
-                            break;
-                        case "Hits Taken":
-                            AddCell(column, contribution.hitsTaken.ToString());
-                            break;
-                        case "Deaths":
-                            AddCell(column, contribution.deaths.ToString());
-                            break;
-                    }
-                }
+                string name = names[column];
+                UIText stat = new UIText(contribution[name].ToString());
+                stat.VAlign = 0.1f * row;
+                stat.HAlign = 1f / names.Length * ((float)column + 0.5f);
+                _dataPanel.Append(stat);
+                playerData.Add(name, stat);
             }
         }
 
-        private void ClearColumns()
+        public void RemovePlayer(int whoAmI)
         {
-            foreach (UIList column in _columns)
-                for (int i = column.Count - 1; i > 0; i--)
-                    column.Remove(column._items[i]);
-        }
-
-        private void AddColumns()
-        {
-            foreach (string heading in _headings)
-                AddColumn(heading);
-        }
-
-        private void AddColumn(string heading)
-        {
-            UIList column = new UIList();
-            column.Width.Set(_dataPanelWidth / _headings.Length, 0);
-            column.Height.Set(_dataPanelHeight, 0);
-            column.HAlign = 1f / (float)(_headings.Length - 1) * (float)_columns.Count;
-            _dataPanel.Append(column);
-
-            UIText headingText = new UIText(heading);
-            headingText.HAlign = 0.5f;
-            column.Add(headingText);
-            _columns.Add(column);
-        }
-
-        private void AddCell(UIList column, string text)
-        {
-            UIText cell = new UIText(text);
-            cell.HAlign = 0.5f;
-            column.Add(cell);
         }
     }
 }

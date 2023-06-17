@@ -1,3 +1,5 @@
+using Leaderboards.UI;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -8,7 +10,40 @@ namespace Leaderboards
     {
         private int targetOldLife;
         private int playerOldLife;
-        public Contribution contribution = new();
+        public Dictionary<string, int> contribution = new() {
+            { "Damage", 0 },
+            { "Kills", 0 },
+            { "Life Lost", 0 },
+            { "Hits Taken", 0 },
+            { "Deaths", 0 }
+        };
+
+        public override void OnEnterWorld(Player player)
+        {
+            UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
+            UILeaderboard leaderboard = leaderboardSystem.leaderboard;
+            leaderboardSystem.ShowMyUI();
+            leaderboard.AddPlayer(player.whoAmI);
+        }
+
+        public override void PlayerConnect(Player player)
+        {
+            // Update other players' UI
+        }
+
+        public override void PlayerDisconnect(Player player)
+        {
+            if (Main.dedServ)
+                return;
+
+            // Update other players' UI
+        }
+
+        private void UpdateContribution(string statName, int value)
+        {
+            contribution[statName] = value;
+            // SendContribution();
+        }
 
         public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
             => targetOldLife = target.life;
@@ -20,10 +55,10 @@ namespace Leaderboards
 
             int damageDealt = target.life > 0 ? targetOldLife - target.life : targetOldLife;
             if (damageDealt > 0)
-                contribution.damage += damageDealt;
+                contribution["Damage"] += damageDealt;
 
             if (target.life <= 0 && targetOldLife > 0)
-                contribution.kills++;
+                contribution["Kills"]++;
         }
 
         public void PreHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
@@ -37,8 +72,8 @@ namespace Leaderboards
             int lifeLost = Player.statLife > 0 ? playerOldLife - Player.statLife : playerOldLife;
             if (lifeLost > 0)
             {
-                contribution.lifeLost += lifeLost;
-                contribution.hitsTaken++;
+                contribution["Life Lost"] += lifeLost;
+                contribution["Hits Taken"]++;
             }
         }
 
@@ -47,7 +82,7 @@ namespace Leaderboards
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
                 return;
 
-            contribution.deaths++;
+            contribution["Deaths"]++;
         }
     }
 }

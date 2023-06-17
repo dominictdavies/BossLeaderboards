@@ -50,12 +50,8 @@ namespace Leaderboards.UI
             if (Main.CurrentFrameFlags.AnyActiveBossNPC)
             {
                 LeaderboardsPlayer leaderboardsPlayer = Main.player[Main.myPlayer].GetModPlayer<LeaderboardsPlayer>();
-                if (!_lastAnyActiveBossNPC) // Boss just spawned
-                    leaderboardsPlayer.contribution = new Contribution();
-
-                UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
-                UILeaderboard leaderboard = leaderboardSystem.leaderboard;
-                leaderboard.UpdateCells();
+                // if (!_lastAnyActiveBossNPC) // Boss just spawned
+                //     leaderboardsPlayer.contribution = new Contribution();
 
                 if (Main.netMode == NetmodeID.MultiplayerClient && _packetTimer-- == 0)
                 {
@@ -77,16 +73,16 @@ namespace Leaderboards.UI
 
         private void SendContribution()
         {
-            Player player = Main.player[Main.myPlayer];
-            LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-            Contribution contribution = leaderboardsPlayer.contribution;
-            ModPacket packet = Mod.GetPacket();
-            packet.Write(contribution.damage);
-            packet.Write(contribution.kills);
-            packet.Write(contribution.lifeLost);
-            packet.Write(contribution.hitsTaken);
-            packet.Write(contribution.deaths);
-            packet.Send();
+            // Player player = Main.player[Main.myPlayer];
+            // LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
+            // Contribution contribution = leaderboardsPlayer.contribution;
+            // ModPacket packet = Mod.GetPacket();
+            // packet.Write(contribution.damage);
+            // packet.Write(contribution.kills);
+            // packet.Write(contribution.lifeLost);
+            // packet.Write(contribution.hitsTaken);
+            // packet.Write(contribution.deaths);
+            // packet.Send();
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
