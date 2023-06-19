@@ -37,8 +37,8 @@ namespace Leaderboards.UI
             leaderboardInterface?.SetState(null);
         }
 
-        // private const int PacketTimerMax = 30;
-        // private int _packetTimer = 0;
+        private const int PacketTimerMax = 30;
+        private int _packetTimer = PacketTimerMax;
         private bool _lastAnyActiveBossNPC = false;
         private GameTime _lastUpdateUiGameTime;
 
@@ -60,16 +60,16 @@ namespace Leaderboards.UI
                     }
                 }
 
-                // if (Main.netMode == NetmodeID.MultiplayerClient && _packetTimer-- == 0)
-                // {
-                //     SendContribution();
-                //     _packetTimer = PacketTimerMax;
-                // }
+                if (Main.netMode == NetmodeID.MultiplayerClient && _packetTimer-- == 0)
+                {
+                    SendContribution();
+                    _packetTimer = PacketTimerMax;
+                }
             }
             else if (_lastAnyActiveBossNPC) // Boss just died
             {
-                // if (Main.netMode == NetmodeID.MultiplayerClient)
-                //     SendContribution();
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    SendContribution();
 
                 UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
                 leaderboardSystem.ShowMyUI();
@@ -84,16 +84,16 @@ namespace Leaderboards.UI
 
         private void SendContribution()
         {
-            // Player player = Main.player[Main.myPlayer];
-            // LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-            // Contribution contribution = leaderboardsPlayer.contribution;
-            // ModPacket packet = Mod.GetPacket();
-            // packet.Write(contribution.damage);
-            // packet.Write(contribution.kills);
-            // packet.Write(contribution.lifeLost);
-            // packet.Write(contribution.hitsTaken);
-            // packet.Write(contribution.deaths);
-            // packet.Send();
+            Player player = Main.player[Main.myPlayer];
+            LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
+            Contribution contribution = leaderboardsPlayer.contribution;
+            ModPacket packet = Mod.GetPacket();
+            packet.Write((long)contribution.GetStat("Damage"));
+            packet.Write((long)contribution.GetStat("Kills"));
+            packet.Write((long)contribution.GetStat("Life Lost"));
+            packet.Write((long)contribution.GetStat("Hits Taken"));
+            packet.Write((long)contribution.GetStat("Deaths"));
+            packet.Send();
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
