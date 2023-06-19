@@ -12,11 +12,15 @@ namespace Leaderboards
         public Contribution(int whoAmI)
         {
             this._whoAmI = whoAmI;
+            InitialiseStats();
+            ModContent.GetInstance<UILeaderboardSystem>().leaderboard.AddPlayer(whoAmI, _contribution);
+        }
+
+        private void InitialiseStats()
+        {
             this._contribution = new Dictionary<string, object>();
             foreach (string statName in UILeaderboard.Stats)
                 _contribution.Add(statName, 0L);
-
-            ModContent.GetInstance<UILeaderboardSystem>().leaderboard.AddPlayer(whoAmI, _contribution);
         }
 
         public object GetStat(string statName) => _contribution[statName];
