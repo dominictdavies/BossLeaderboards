@@ -10,10 +10,10 @@ namespace Leaderboards.UI
 {
     internal class UILeaderboard : UIState
     {
-        private const float _masterPanelWidth = 600f;
-        private const float _masterPanelHeight = 300f;
-        private const float _dataPanelWidth = _masterPanelWidth - 20f;
-        private const float _dataPanelHeight = _masterPanelHeight - 80f;
+        private const float MasterPanelWidth = 600f;
+        private const float MasterPanelHeight = 300f;
+        private const float DataPanelWidth = MasterPanelWidth - 20f;
+        private const float DataPanelHeight = MasterPanelHeight - 80f;
         private UIPanel _dataPanel;
         public static List<string> Stats = new() { "Damage", "Kills", "Life Lost", "Hits Taken", "Deaths" };
         private Dictionary<int, Dictionary<string, UIText>> _data = new();
@@ -21,8 +21,8 @@ namespace Leaderboards.UI
         public override void OnInitialize()
         {
             UIDragablePanel masterPanel = new UIDragablePanel();
-            masterPanel.Width.Set(_masterPanelWidth, 0);
-            masterPanel.Height.Set(_masterPanelHeight, 0);
+            masterPanel.Width.Set(MasterPanelWidth, 0);
+            masterPanel.Height.Set(MasterPanelHeight, 0);
             masterPanel.HAlign = masterPanel.VAlign = 0.5f;
             Append(masterPanel);
 
@@ -44,8 +44,8 @@ namespace Leaderboards.UI
             closeButton.Append(closeText);
 
             _dataPanel = new UIPanel();
-            _dataPanel.Width.Set(_dataPanelWidth, 0);
-            _dataPanel.Height.Set(_dataPanelHeight, 0);
+            _dataPanel.Width.Set(DataPanelWidth, 0);
+            _dataPanel.Height.Set(DataPanelHeight, 0);
             _dataPanel.Top.Set(55, 0);
             _dataPanel.HAlign = 0.5f;
             masterPanel.Append(_dataPanel);
@@ -57,16 +57,12 @@ namespace Leaderboards.UI
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
 
-        public void AddPlayer(int whoAmI)
+        public void AddPlayer(int whoAmI, Dictionary<string, object> contribution)
         {
-            Dictionary<string, UIText> playerData = new();
-            _data.Add(whoAmI, playerData);
+            _data.Add(whoAmI, new Dictionary<string, UIText>());
 
-            Player player = Main.player[whoAmI];
-            LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-            Contribution contribution = leaderboardsPlayer.contribution;
             foreach (string statName in Stats)
-                AddCell(whoAmI, statName, contribution.GetStat(statName).ToString());
+                AddCell(whoAmI, statName, contribution[statName].ToString());
         }
 
         private void AddCell(int whoAmI, string statName, string value)

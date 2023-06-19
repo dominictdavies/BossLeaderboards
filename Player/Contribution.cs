@@ -6,37 +6,34 @@ namespace Leaderboards
 {
     internal class Contribution
     {
-        private int whoAmI;
-        private Dictionary<string, object> contribution = new();
+        private int _whoAmI;
+        private Dictionary<string, object> _contribution;
 
         public Contribution(int whoAmI)
         {
-            this.whoAmI = whoAmI;
+            this._whoAmI = whoAmI;
+            this._contribution = new Dictionary<string, object>();
             foreach (string statName in UILeaderboard.Stats)
-                contribution.Add(statName, 0L);
+                _contribution.Add(statName, 0L);
+
+            ModContent.GetInstance<UILeaderboardSystem>().leaderboard.AddPlayer(whoAmI, _contribution);
         }
 
-        public void AddThisPlayer()
-        {
-            ModContent.GetInstance<UILeaderboardSystem>().leaderboard.AddPlayer(whoAmI);
-        }
-
-        public object GetStat(string statName) => contribution[statName];
+        public object GetStat(string statName) => _contribution[statName];
 
         public void SetStat(string statName, object value)
         {
-            contribution[statName] = value;
-
-            UILeaderboard leaderboard = ModContent.GetInstance<UILeaderboardSystem>().leaderboard;
-            leaderboard.UpdateCell(whoAmI, statName, contribution[statName]);
+            _contribution[statName] = value;
+            UpdateCell(statName);
         }
 
         public void PlusStat(string statName, long value)
         {
-            contribution[statName] = (long)contribution[statName] + value;
-
-            UILeaderboard leaderboard = ModContent.GetInstance<UILeaderboardSystem>().leaderboard;
-            leaderboard.UpdateCell(whoAmI, statName, contribution[statName]);
+            _contribution[statName] = (long)_contribution[statName] + value;
+            UpdateCell(statName);
         }
+
+        private void UpdateCell(string statName)
+            => ModContent.GetInstance<UILeaderboardSystem>().leaderboard.UpdateCell(_whoAmI, statName, _contribution[statName]);
     }
 }

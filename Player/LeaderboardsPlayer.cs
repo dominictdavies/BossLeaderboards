@@ -7,8 +7,8 @@ namespace Leaderboards
 {
     internal partial class LeaderboardsPlayer : ModPlayer
     {
-        private int targetOldLife;
-        private int playerOldLife;
+        private int _targetOldLife;
+        private int _playerOldLife;
         public Contribution contribution;
 
         public override void OnEnterWorld(Player player)
@@ -21,30 +21,30 @@ namespace Leaderboards
         }
 
         public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
-            => targetOldLife = target.life;
+            => _targetOldLife = target.life;
 
         public void PostHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
         {
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
                 return;
 
-            int damageDealt = target.life > 0 ? targetOldLife - target.life : targetOldLife;
+            int damageDealt = target.life > 0 ? _targetOldLife - target.life : _targetOldLife;
             if (damageDealt > 0)
                 contribution.PlusStat("Damage", damageDealt);
 
-            if (target.life <= 0 && targetOldLife > 0)
+            if (target.life <= 0 && _targetOldLife > 0)
                 contribution.PlusStat("Kills", 1);
         }
 
         public void PreHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
-            => playerOldLife = Player.statLife;
+            => _playerOldLife = Player.statLife;
 
         public void PostHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
         {
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
                 return;
 
-            int lifeLost = Player.statLife > 0 ? playerOldLife - Player.statLife : playerOldLife;
+            int lifeLost = Player.statLife > 0 ? _playerOldLife - Player.statLife : _playerOldLife;
             if (lifeLost > 0)
             {
                 contribution.PlusStat("Life Lost", lifeLost);

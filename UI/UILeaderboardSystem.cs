@@ -12,16 +12,6 @@ namespace Leaderboards.UI
         internal UserInterface leaderboardInterface;
         internal UILeaderboard leaderboard;
 
-        internal void ShowMyUI()
-        {
-            leaderboardInterface?.SetState(leaderboard);
-        }
-
-        internal void HideMyUI()
-        {
-            leaderboardInterface?.SetState(null);
-        }
-
         public override void Load()
         {
             if (Main.dedServ)
@@ -37,6 +27,16 @@ namespace Leaderboards.UI
             leaderboard = null;
         }
 
+        internal void ShowMyUI()
+        {
+            leaderboardInterface?.SetState(leaderboard);
+        }
+
+        internal void HideMyUI()
+        {
+            leaderboardInterface?.SetState(null);
+        }
+
         // private const int PacketTimerMax = 30;
         // private int _packetTimer = 0;
         private bool _lastAnyActiveBossNPC = false;
@@ -44,9 +44,6 @@ namespace Leaderboards.UI
 
         public override void UpdateUI(GameTime gameTime)
         {
-            if (leaderboardInterface?.CurrentState != null)
-                leaderboardInterface.Update(gameTime);
-
             if (Main.CurrentFrameFlags.AnyActiveBossNPC)
             {
                 if (!_lastAnyActiveBossNPC) // Boss just spawned
@@ -60,7 +57,6 @@ namespace Leaderboards.UI
 
                         LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
                         leaderboardsPlayer.contribution = new Contribution(player.whoAmI);
-                        leaderboardsPlayer.contribution.AddThisPlayer();
                     }
                 }
 
@@ -78,6 +74,9 @@ namespace Leaderboards.UI
                 UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
                 leaderboardSystem.ShowMyUI();
             }
+
+            if (leaderboardInterface?.CurrentState != null)
+                leaderboardInterface.Update(gameTime);
 
             _lastAnyActiveBossNPC = Main.CurrentFrameFlags.AnyActiveBossNPC;
             _lastUpdateUiGameTime = gameTime;
