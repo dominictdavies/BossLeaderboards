@@ -49,7 +49,7 @@ namespace Leaderboards.UI
                 if (!_lastAnyActiveBossNPC) // Boss just spawned
                 {
                     leaderboard.ClearData();
-                    SetAllContributions(true);
+                    SetNewContributions();
                 }
 
                 if (Main.netMode == NetmodeID.MultiplayerClient && _packetTimer-- == 0)
@@ -62,8 +62,6 @@ namespace Leaderboards.UI
             {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     SendContribution();
-
-                SetAllContributions(false);
             }
 
             if (leaderboardInterface?.CurrentState != null)
@@ -73,7 +71,7 @@ namespace Leaderboards.UI
             _lastUpdateUiGameTime = gameTime;
         }
 
-        private void SetAllContributions(bool setNew)
+        private void SetNewContributions()
         {
             foreach (Player player in Main.player)
             {
@@ -81,7 +79,7 @@ namespace Leaderboards.UI
                     continue;
 
                 LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-                leaderboardsPlayer.contribution = setNew ? new Contribution(player.whoAmI) : null;
+                leaderboardsPlayer.contribution = new Contribution(player.whoAmI);
             }
         }
 
