@@ -48,7 +48,7 @@ namespace Leaderboards.UI
             {
                 if (!_lastAnyActiveBossNPC) // Boss just spawned
                 {
-                    leaderboard.ClearData();
+                    leaderboard.RemoveData();
                     SetNewContributions();
                 }
 

@@ -76,10 +76,17 @@ namespace Leaderboards.UI
         public void UpdateCell(int whoAmI, string statName, object value)
             => _data[whoAmI][statName].SetText(value.ToString());
 
-        public void ClearData()
+        public void RemoveData(bool showAwaitingText = false)
         {
             _dataPanel.RemoveAllChildren();
             _data.Clear();
+
+            if (showAwaitingText)
+            {
+                UIText awaitingText = new UIText("Awaiting boss fight...");
+                awaitingText.HAlign = awaitingText.VAlign = 0.5f;
+                _dataPanel.Append(awaitingText);
+            }
         }
     }
 }

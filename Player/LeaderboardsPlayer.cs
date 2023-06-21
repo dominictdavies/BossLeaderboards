@@ -16,7 +16,7 @@ namespace Leaderboards
             UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
             UILeaderboard leaderboard = leaderboardSystem.leaderboard;
 
-            leaderboard.ClearData();
+            leaderboard.RemoveData(true);
             leaderboardSystem.ShowMyUI();
         }
 
