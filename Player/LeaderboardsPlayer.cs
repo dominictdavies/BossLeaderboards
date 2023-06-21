@@ -25,7 +25,7 @@ namespace Leaderboards
 
         public void PostHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
         {
-            if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
+            if (contribution is null)
                 return;
 
             int damageDealt = target.life > 0 ? _targetOldLife - target.life : _targetOldLife;
@@ -33,7 +33,7 @@ namespace Leaderboards
                 contribution.PlusStat("Damage", damageDealt);
 
             if (target.life <= 0 && _targetOldLife > 0)
-                contribution.PlusStat("Kills", 1);
+                contribution.IncrementStat("Kills");
         }
 
         public void PreHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
@@ -41,23 +41,23 @@ namespace Leaderboards
 
         public void PostHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
         {
-            if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
+            if (contribution is null)
                 return;
 
             int lifeLost = Player.statLife > 0 ? _playerOldLife - Player.statLife : _playerOldLife;
             if (lifeLost > 0)
             {
                 contribution.PlusStat("Life Lost", lifeLost);
-                contribution.PlusStat("Hits Taken", 1);
+                contribution.IncrementStat("Hits Taken");
             }
         }
 
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
-            if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
+            if (contribution is null)
                 return;
 
-            contribution.PlusStat("Deaths", 1);
+            contribution.IncrementStat("Deaths");
         }
     }
 }

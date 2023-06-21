@@ -31,9 +31,15 @@ namespace Leaderboards
             UpdateCell(statName);
         }
 
-        public void PlusStat(string statName, long value)
+        public void PlusStat(string statName, long amount)
         {
-            _contribution[statName] = (long)_contribution[statName] + value;
+            _contribution[statName] = (long)_contribution[statName] + amount;
+            UpdateCell(statName);
+        }
+
+        public void IncrementStat(string statName)
+        {
+            _contribution[statName] = (long)_contribution[statName] + 1L;
             UpdateCell(statName);
         }
 
