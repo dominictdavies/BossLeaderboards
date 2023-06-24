@@ -13,7 +13,6 @@ namespace Leaderboards
         {
             this._whoAmI = whoAmI;
             InitialiseStats();
-            ModContent.GetInstance<UILeaderboardSystem>().leaderboard.AddPlayer(whoAmI, _contribution);
         }
 
         private void InitialiseStats()
@@ -24,6 +23,8 @@ namespace Leaderboards
         }
 
         public object GetStat(string statName) => _contribution[statName];
+
+        public void AddToLeaderboard() => ModContent.GetInstance<UILeaderboardSystem>().leaderboard.AddPlayer(_whoAmI, _contribution);
 
         public void SetStat(string statName, object value)
         {

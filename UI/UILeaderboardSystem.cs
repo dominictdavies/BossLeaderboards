@@ -73,21 +73,18 @@ namespace Leaderboards.UI
 
         private void SetNewContributions()
         {
-            foreach (Player player in Main.player)
+            foreach (Player player in Utilities.GetActivePlayers())
             {
-                if (!player.active)
-                    continue;
-
                 LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
                 leaderboardsPlayer.contribution = new Contribution(player.whoAmI);
+                leaderboardsPlayer.contribution.AddToLeaderboard();
             }
         }
 
         private void SendContribution()
         {
-            Player player = Main.player[Main.myPlayer];
-            LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-            Contribution contribution = leaderboardsPlayer.contribution;
+            LeaderboardsPlayer localLeaderboardsPlayer = Main.LocalPlayer.GetModPlayer<LeaderboardsPlayer>();
+            Contribution contribution = localLeaderboardsPlayer.contribution;
             ModPacket packet = Mod.GetPacket();
             packet.Write((long)contribution.GetStat("Damage"));
             packet.Write((long)contribution.GetStat("Kills"));
