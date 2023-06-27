@@ -21,7 +21,7 @@ namespace Leaderboards
                     reader.ReadInt64(),
                     reader.ReadInt64()
                 };
-                UpdateContribution(Main.player[whoAmI], values);
+                UpdateContribution(whoAmI, values);
 
                 List<Player> activePlayers = Utilities.GetActivePlayers();
                 if (++_recievedContributions >= activePlayers.Count)
@@ -45,9 +45,9 @@ namespace Leaderboards
             }
             else if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                for (byte i = 0; i < reader.ReadByte(); i++)
+                for (int i = 0; i < reader.ReadByte(); i++)
                 {
-                    byte playerIndex = reader.ReadByte();
+                    byte index = reader.ReadByte();
                     long[] values = new long[] {
                         reader.ReadInt64(),
                         reader.ReadInt64(),
@@ -55,14 +55,14 @@ namespace Leaderboards
                         reader.ReadInt64(),
                         reader.ReadInt64()
                     };
-                    UpdateContribution(Main.player[playerIndex], values);
+                    UpdateContribution(index, values);
                 }
             }
         }
 
-        private void UpdateContribution(Player player, long[] values)
+        private void UpdateContribution(int whoAmI, long[] values)
         {
-            Contribution contribution = player.GetModPlayer<LeaderboardsPlayer>().contribution;
+            Contribution contribution = Main.player[whoAmI].GetModPlayer<LeaderboardsPlayer>().contribution;
             contribution.SetStat("Damage", values[0]);
             contribution.SetStat("Kills", values[1]);
             contribution.SetStat("Life Lost", values[2]);
