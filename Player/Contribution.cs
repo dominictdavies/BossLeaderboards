@@ -1,5 +1,7 @@
 using Leaderboards.UI;
 using System.Collections.Generic;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Leaderboards
@@ -29,7 +31,8 @@ namespace Leaderboards
         public void SetStat(string statName, object value)
         {
             _contribution[statName] = value;
-            UpdateCell(statName);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                UpdateCell(statName);
         }
 
         public void PlusStat(string statName, long amount)
