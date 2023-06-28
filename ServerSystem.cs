@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.ID;
 
 namespace Leaderboards
 {
@@ -10,12 +9,9 @@ namespace Leaderboards
         private const int PacketTimerMax = 30;
         private int _packetTimer = PacketTimerMax;
 
-        public override void PostUpdateEverything()
+        public override void PreUpdateWorld()
         {
-            if (Main.netMode != NetmodeID.Server)
-                return;
-
-            if (--_packetTimer == 0)
+            if (Main.CurrentFrameFlags.AnyActiveBossNPC && --_packetTimer == 0) // Needs fix, figure out when players have contribution for server
             {
                 // Send large packet to all clients containing state of leaderboard
                 List<Player> activePlayers = Utilities.GetActivePlayers();
@@ -32,7 +28,7 @@ namespace Leaderboards
                     packet.Write((long)contribution.GetStat("Deaths"));
                 }
                 packet.Send();
-                Mod.Logger.Info($"Sent large packet.");
+                Mod.Logger.Debug("Sent large packet.");
                 _packetTimer = PacketTimerMax;
             }
         }

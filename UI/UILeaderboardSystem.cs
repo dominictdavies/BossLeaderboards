@@ -37,7 +37,7 @@ namespace Leaderboards.UI
             leaderboardInterface?.SetState(null);
         }
 
-        private const int PacketTimerMax = 30;
+        private const int PacketTimerMax = 15;
         private int _packetTimer = PacketTimerMax;
         private bool _lastAnyActiveBossNPC = false;
         private GameTime _lastUpdateUiGameTime;
@@ -61,7 +61,7 @@ namespace Leaderboards.UI
             else if (_lastAnyActiveBossNPC) // Boss just died
             {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    SendContribution();
+                    SendContribution(force: true);
             }
 
             if (leaderboardInterface?.CurrentState != null)
@@ -81,11 +81,12 @@ namespace Leaderboards.UI
             }
         }
 
-        private void SendContribution()
+        private void SendContribution(bool force = false)
         {
             LeaderboardsPlayer localLeaderboardsPlayer = Main.LocalPlayer.GetModPlayer<LeaderboardsPlayer>();
             Contribution contribution = localLeaderboardsPlayer.contribution;
             ModPacket packet = Mod.GetPacket();
+            packet.Write(force ? true : false);
             packet.Write((long)contribution.GetStat("Damage"));
             packet.Write((long)contribution.GetStat("Kills"));
             packet.Write((long)contribution.GetStat("Life Lost"));
