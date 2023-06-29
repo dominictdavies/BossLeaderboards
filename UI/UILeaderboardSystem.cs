@@ -61,7 +61,7 @@ namespace Leaderboards.UI
             else if (_lastAnyActiveBossNPC) // Boss just died
             {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    SendContribution(force: true);
+                    SendContribution();
             }
 
             if (leaderboardInterface?.CurrentState != null)
@@ -76,17 +76,16 @@ namespace Leaderboards.UI
             foreach (Player player in Utilities.GetActivePlayers())
             {
                 LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-                leaderboardsPlayer.contribution = new Contribution(player.whoAmI);
-                leaderboardsPlayer.contribution.AddToLeaderboard();
+                leaderboardsPlayer.contribution = new Contribution();
+                ModContent.GetInstance<UILeaderboardSystem>().leaderboard.AddPlayer(player.whoAmI, leaderboardsPlayer.contribution);
             }
         }
 
-        private void SendContribution(bool force = false)
+        private void SendContribution()
         {
             LeaderboardsPlayer localLeaderboardsPlayer = Main.LocalPlayer.GetModPlayer<LeaderboardsPlayer>();
             Contribution contribution = localLeaderboardsPlayer.contribution;
             ModPacket packet = Mod.GetPacket();
-            packet.Write(force ? true : false);
             packet.Write((long)contribution.GetStat("Damage"));
             packet.Write((long)contribution.GetStat("Kills"));
             packet.Write((long)contribution.GetStat("Life Lost"));

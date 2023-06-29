@@ -11,29 +11,14 @@ namespace Leaderboards
         {
             if (Main.netMode == NetmodeID.Server)
             {
-                if (reader.ReadBoolean())
-                {
-                    ModPacket packet = this.GetPacket();
-                    packet.Write(1);
-                    packet.Write(whoAmI);
-                    packet.Write(reader.ReadInt64());
-                    packet.Write(reader.ReadInt64());
-                    packet.Write(reader.ReadInt64());
-                    packet.Write(reader.ReadInt64());
-                    packet.Write(reader.ReadInt64());
-                    packet.Send(ignoreClient: whoAmI);
-                }
-                else
-                {
-                    this.Logger.Debug($"Recieved packet from {Main.player[whoAmI].name}.");
-                    long[] values = new long[5];
-                    values[0] = reader.ReadInt64();
-                    values[1] = reader.ReadInt64();
-                    values[2] = reader.ReadInt64();
-                    values[3] = reader.ReadInt64();
-                    values[4] = reader.ReadInt64();
-                    UpdateContribution(whoAmI, values);
-                }
+                this.Logger.Debug($"Recieved packet from {Main.player[whoAmI].name}.");
+                long[] values = new long[5];
+                values[0] = reader.ReadInt64();
+                values[1] = reader.ReadInt64();
+                values[2] = reader.ReadInt64();
+                values[3] = reader.ReadInt64();
+                values[4] = reader.ReadInt64();
+                UpdateContribution(whoAmI, values);
             }
             else if (Main.netMode == NetmodeID.MultiplayerClient)
             {
@@ -63,12 +48,11 @@ namespace Leaderboards
         private void UpdateContribution(int whoAmI, long[] values)
         {
             LeaderboardsPlayer leaderboardsPlayer = Main.player[whoAmI].GetModPlayer<LeaderboardsPlayer>();
-            leaderboardsPlayer.contribution = new Contribution(whoAmI);
-            leaderboardsPlayer.contribution.SetStat("Damage", values[0]);
-            leaderboardsPlayer.contribution.SetStat("Kills", values[1]);
-            leaderboardsPlayer.contribution.SetStat("Life Lost", values[2]);
-            leaderboardsPlayer.contribution.SetStat("Hits Taken", values[3]);
-            leaderboardsPlayer.contribution.SetStat("Deaths", values[4]);
+            leaderboardsPlayer.contribution.SetStat(whoAmI, "Damage", values[0]);
+            leaderboardsPlayer.contribution.SetStat(whoAmI, "Kills", values[1]);
+            leaderboardsPlayer.contribution.SetStat(whoAmI, "Life Lost", values[2]);
+            leaderboardsPlayer.contribution.SetStat(whoAmI, "Hits Taken", values[3]);
+            leaderboardsPlayer.contribution.SetStat(whoAmI, "Deaths", values[4]);
             this.Logger.Debug($"Updated contribution of {Main.player[whoAmI].name} with values {values[0]}, {values[1]}, {values[2]}, {values[3]}, {values[4]}.");
         }
     }

@@ -1,53 +1,40 @@
 using Leaderboards.UI;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using System.Collections.Generic;
 
 namespace Leaderboards
 {
     internal class Contribution
     {
-        private int _whoAmI;
         private Dictionary<string, object> _contribution;
 
-        public Contribution(int whoAmI)
-        {
-            this._whoAmI = whoAmI;
-            InitialiseStats();
-        }
-
-        private void InitialiseStats()
+        public Contribution()
         {
             this._contribution = new Dictionary<string, object>();
+            Reset();
+        }
+
+        public void Reset()
+        {
+            this._contribution.Clear();
             foreach (string statName in UILeaderboard.Stats)
                 _contribution.Add(statName, 0L);
         }
 
         public object GetStat(string statName) => _contribution[statName];
 
-        public void AddToLeaderboard() => ModContent.GetInstance<UILeaderboardSystem>().leaderboard.AddPlayer(_whoAmI, _contribution);
+        public void IncreaseStat(int whoAmI, string statName, long amount = 1)
+        {
+            SetStat(whoAmI, statName, (long)_contribution[statName] + amount);
+        }
 
-        public void SetStat(string statName, object value)
+        public void SetStat(int whoAmI, string statName, object value)
         {
             _contribution[statName] = value;
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                UpdateCell(statName);
+                ModContent.GetInstance<UILeaderboardSystem>().leaderboard.UpdateCell(whoAmI, statName, value);
         }
-
-        public void PlusStat(string statName, long amount)
-        {
-            _contribution[statName] = (long)_contribution[statName] + amount;
-            UpdateCell(statName);
-        }
-
-        public void IncrementStat(string statName)
-        {
-            _contribution[statName] = (long)_contribution[statName] + 1L;
-            UpdateCell(statName);
-        }
-
-        private void UpdateCell(string statName)
-            => ModContent.GetInstance<UILeaderboardSystem>().leaderboard.UpdateCell(_whoAmI, statName, _contribution[statName]);
     }
 }

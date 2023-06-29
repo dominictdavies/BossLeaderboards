@@ -56,12 +56,12 @@ namespace Leaderboards.UI
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
 
-        public void AddPlayer(int whoAmI, Dictionary<string, object> contribution)
+        public void AddPlayer(int whoAmI, Contribution contribution)
         {
             _data.Add(whoAmI, new Dictionary<string, UIText>());
 
             foreach (string statName in Stats)
-                AddCell(whoAmI, statName, contribution[statName].ToString());
+                AddCell(whoAmI, statName, contribution.GetStat(statName).ToString());
         }
 
         private void AddCell(int whoAmI, string statName, string value)
