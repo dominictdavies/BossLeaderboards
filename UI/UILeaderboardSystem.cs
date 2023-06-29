@@ -39,14 +39,14 @@ namespace Leaderboards.UI
 
         private const int PacketTimerMax = 15;
         private int _packetTimer = PacketTimerMax;
-        private bool _lastAnyActiveBossNPC = false;
+        private bool _oldAnyActiveBossNPC = false;
         private GameTime _lastUpdateUiGameTime;
 
         public override void UpdateUI(GameTime gameTime)
         {
             if (Main.CurrentFrameFlags.AnyActiveBossNPC)
             {
-                if (!_lastAnyActiveBossNPC) // Boss just spawned
+                if (!_oldAnyActiveBossNPC) // Boss just spawned
                 {
                     leaderboard.RemoveData();
                     SetNewContributions();
@@ -58,7 +58,7 @@ namespace Leaderboards.UI
                     _packetTimer = PacketTimerMax;
                 }
             }
-            else if (_lastAnyActiveBossNPC) // Boss just died
+            else if (_oldAnyActiveBossNPC) // Boss just died
             {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     SendContribution();
@@ -67,7 +67,7 @@ namespace Leaderboards.UI
             if (leaderboardInterface?.CurrentState != null)
                 leaderboardInterface.Update(gameTime);
 
-            _lastAnyActiveBossNPC = Main.CurrentFrameFlags.AnyActiveBossNPC;
+            _oldAnyActiveBossNPC = Main.CurrentFrameFlags.AnyActiveBossNPC;
             _lastUpdateUiGameTime = gameTime;
         }
 

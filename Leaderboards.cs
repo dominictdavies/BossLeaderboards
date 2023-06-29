@@ -33,13 +33,13 @@ namespace Leaderboards
                     values[2] = reader.ReadInt64();
                     values[3] = reader.ReadInt64();
                     values[4] = reader.ReadInt64();
+                    this.Logger.Debug($"Read {Main.player[recievedWhoAmI].name} with values {values[0]}, {values[1]}, {values[2]}, {values[3]}, {values[4]}.");
                     if (recievedWhoAmI == Main.myPlayer)
                     {
                         this.Logger.Debug("Recieved own contribution so will ignore it.");
                         continue;
                     }
 
-                    this.Logger.Debug($"Read {Main.player[recievedWhoAmI].name} with values {values[0]}, {values[1]}, {values[2]}, {values[3]}, {values[4]}.");
                     UpdateContribution(recievedWhoAmI, values);
                 }
             }

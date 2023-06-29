@@ -8,13 +8,13 @@ namespace Leaderboards
     {
         private const int PacketTimerMax = 30;
         private int _packetTimer = PacketTimerMax;
-        private const int StallTimerMax = 10 * 60;
+        private const int StallTimerMax = 5 * 60;
         private int _stallTimer = 0;
-        private bool _doStall = false;
+        private bool _oldAnyActiveBossNPC = false;
 
         public override void PreUpdateWorld()
         {
-            if ((Main.CurrentFrameFlags.AnyActiveBossNPC || _stallTimer > 0) && --_packetTimer == 0) // Needs fix, figure out when players have contribution for server
+            if ((Main.CurrentFrameFlags.AnyActiveBossNPC || --_stallTimer > 0) && --_packetTimer == 0)
             {
                 // Send large packet to all clients containing state of leaderboard
                 List<Player> activePlayers = Utilities.GetActivePlayers();
@@ -31,15 +31,13 @@ namespace Leaderboards
                     packet.Write((long)contribution.GetStat("Deaths"));
                 }
                 packet.Send();
-                Mod.Logger.Debug("Sent large packet.");
                 _packetTimer = PacketTimerMax;
-                _doStall = true;
+                Mod.Logger.Debug("Sent large packet.");
             }
-            else if (_doStall)
-            {
+            else if (!Main.CurrentFrameFlags.AnyActiveBossNPC && _oldAnyActiveBossNPC) // Boss just died
                 _stallTimer = StallTimerMax;
-                _doStall = false;
-            }
+
+            _oldAnyActiveBossNPC = Main.CurrentFrameFlags.AnyActiveBossNPC;
         }
     }
 }
