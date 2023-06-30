@@ -35,7 +35,7 @@ namespace Leaderboards
         {
             _contribution[statName] = value;
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                ModContent.GetInstance<UILeaderboardSystem>().leaderboard.UpdateCell(whoAmI, statName, value);
+                ModContent.GetInstance<LeaderboardSystem>().leaderboard.UpdateCell(whoAmI, statName, value);
         }
     }
 }

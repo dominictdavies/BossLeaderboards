@@ -53,7 +53,7 @@ namespace Leaderboards.UI
 
         private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)
         {
-            ModContent.GetInstance<UILeaderboardSystem>().HideMyUI();
+            ModContent.GetInstance<LeaderboardSystem>().HideMyUI();
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
 

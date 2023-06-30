@@ -7,7 +7,7 @@ using Terraria.ID;
 
 namespace Leaderboards.UI
 {
-    internal class UILeaderboardSystem : ModSystem
+    internal class LeaderboardSystem : ModSystem
     {
         internal UserInterface leaderboardInterface;
         internal UILeaderboard leaderboard;
@@ -77,7 +77,7 @@ namespace Leaderboards.UI
             {
                 LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
                 leaderboardsPlayer.contribution = new Contribution();
-                ModContent.GetInstance<UILeaderboardSystem>().leaderboard.AddPlayer(player.whoAmI, leaderboardsPlayer.contribution);
+                ModContent.GetInstance<LeaderboardSystem>().leaderboard.AddPlayer(player.whoAmI, leaderboardsPlayer.contribution);
             }
         }
 

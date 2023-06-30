@@ -13,7 +13,7 @@ namespace Leaderboards
 
         public override void OnEnterWorld(Player player)
         {
-            UILeaderboardSystem leaderboardSystem = ModContent.GetInstance<UILeaderboardSystem>();
+            LeaderboardSystem leaderboardSystem = ModContent.GetInstance<LeaderboardSystem>();
             UILeaderboard leaderboard = leaderboardSystem.leaderboard;
             leaderboard.RemoveData(true);
             leaderboardSystem.ShowMyUI();
