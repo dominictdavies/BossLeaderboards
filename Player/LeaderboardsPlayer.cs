@@ -22,6 +22,9 @@ namespace Leaderboards
         public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
             => _targetOldLife = target.life;
 
+        public void PreHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
+            => _playerOldLife = Player.statLife;
+
         public void PostHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
         {
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
@@ -34,9 +37,6 @@ namespace Leaderboards
             if (target.life <= 0 && _targetOldLife > 0)
                 contribution.IncreaseStat(Player.whoAmI, "Kills");
         }
-
-        public void PreHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
-            => _playerOldLife = Player.statLife;
 
         public void PostHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
         {
