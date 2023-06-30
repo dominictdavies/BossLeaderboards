@@ -10,7 +10,7 @@ namespace Leaderboards.UI
     {
         internal UserInterface leaderboardInterface;
         internal UILeaderboard leaderboard;
-        private GameTime _lastUpdateUiGameTime;
+        private GameTime _oldUpdateUiGameTime;
 
         public override void Load()
         {
@@ -47,8 +47,8 @@ namespace Leaderboards.UI
                 "Leaderboards: LeaderboardInterface",
                 delegate
                 {
-                    if (_lastUpdateUiGameTime != null && leaderboardInterface?.CurrentState != null)
-                        leaderboardInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+                    if (_oldUpdateUiGameTime != null && leaderboardInterface?.CurrentState != null)
+                        leaderboardInterface.Draw(Main.spriteBatch, _oldUpdateUiGameTime);
                     return true;
                 },
                 InterfaceScaleType.UI

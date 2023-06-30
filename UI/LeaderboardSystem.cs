@@ -7,9 +7,9 @@ namespace Leaderboards.UI
 {
     internal partial class LeaderboardSystem : ModSystem
     {
+        private bool _oldAnyActiveBossNPC = false;
         private const int PacketTimerMax = 15;
         private int _packetTimer = PacketTimerMax;
-        private bool _oldAnyActiveBossNPC = false;
 
         public override void UpdateUI(GameTime gameTime)
         {
@@ -21,7 +21,7 @@ namespace Leaderboards.UI
                     SetNewContributions();
                 }
 
-                if (Main.netMode == NetmodeID.MultiplayerClient && _packetTimer-- == 0)
+                if (Main.netMode == NetmodeID.MultiplayerClient && --_packetTimer == 0)
                 {
                     SendContribution();
                     _packetTimer = PacketTimerMax;
@@ -37,7 +37,7 @@ namespace Leaderboards.UI
                 leaderboardInterface.Update(gameTime);
 
             _oldAnyActiveBossNPC = Main.CurrentFrameFlags.AnyActiveBossNPC;
-            _lastUpdateUiGameTime = gameTime;
+            _oldUpdateUiGameTime = gameTime;
         }
 
         private void SetNewContributions()
@@ -52,8 +52,7 @@ namespace Leaderboards.UI
 
         private void SendContribution()
         {
-            LeaderboardsPlayer localLeaderboardsPlayer = Main.LocalPlayer.GetModPlayer<LeaderboardsPlayer>();
-            Contribution contribution = localLeaderboardsPlayer.contribution;
+            Contribution contribution = Main.LocalPlayer.GetModPlayer<LeaderboardsPlayer>().contribution;
             ModPacket packet = Mod.GetPacket();
             foreach (string statName in Contribution.StatNames)
                 packet.Write((long)contribution.GetStat(statName));
