@@ -86,11 +86,8 @@ namespace Leaderboards.UI
             LeaderboardsPlayer localLeaderboardsPlayer = Main.LocalPlayer.GetModPlayer<LeaderboardsPlayer>();
             Contribution contribution = localLeaderboardsPlayer.contribution;
             ModPacket packet = Mod.GetPacket();
-            packet.Write((long)contribution.GetStat("Damage"));
-            packet.Write((long)contribution.GetStat("Kills"));
-            packet.Write((long)contribution.GetStat("Life Lost"));
-            packet.Write((long)contribution.GetStat("Hits Taken"));
-            packet.Write((long)contribution.GetStat("Deaths"));
+            foreach (string statName in Contribution.StatNames)
+                packet.Write((long)contribution.GetStat(statName));
             packet.Send();
         }
 

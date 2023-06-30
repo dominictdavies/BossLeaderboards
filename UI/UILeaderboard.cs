@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
@@ -14,7 +15,7 @@ namespace Leaderboards.UI
         private const float DataPanelWidth = MasterPanelWidth - 20f;
         private const float DataPanelHeight = MasterPanelHeight - 80f;
         private UIPanel _dataPanel;
-        public static List<string> Stats = new() { "Damage", "Kills", "Life Lost", "Hits Taken", "Deaths" };
+        public static List<string> VisibleStats = Contribution.StatNames.ToList<string>();
         private Dictionary<int, Dictionary<string, UIText>> _data = new();
 
         public override void OnInitialize()
@@ -60,7 +61,7 @@ namespace Leaderboards.UI
         {
             _data.Add(whoAmI, new Dictionary<string, UIText>());
 
-            foreach (string statName in Stats)
+            foreach (string statName in Contribution.StatNames)
                 AddCell(whoAmI, statName, contribution.GetStat(statName).ToString());
         }
 
@@ -68,7 +69,7 @@ namespace Leaderboards.UI
         {
             UIText statText = new UIText(value);
             statText.VAlign = 0.1f * (_data.Count - 1);
-            statText.HAlign = 1f / Stats.Count * ((float)Stats.IndexOf(statName) + 0.5f);
+            statText.HAlign = 1f / VisibleStats.Count * ((float)VisibleStats.IndexOf(statName) + 0.5f);
             _dataPanel.Append(statText);
             _data[whoAmI].Add(statName, statText);
         }

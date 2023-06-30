@@ -8,6 +8,7 @@ namespace Leaderboards
 {
     internal class Contribution
     {
+        public static string[] StatNames = { "Damage", "Kills", "Life Lost", "Hits Taken", "Deaths" };
         private Dictionary<string, object> _contribution;
 
         public Contribution()
@@ -19,7 +20,7 @@ namespace Leaderboards
         public void Reset()
         {
             this._contribution.Clear();
-            foreach (string statName in UILeaderboard.Stats)
+            foreach (string statName in StatNames)
                 _contribution.Add(statName, 0L);
         }
 

@@ -24,18 +24,16 @@ namespace Leaderboards
                 {
                     Contribution contribution = player.GetModPlayer<LeaderboardsPlayer>().contribution;
                     packet.Write(player.whoAmI);
-                    packet.Write((long)contribution.GetStat("Damage"));
-                    packet.Write((long)contribution.GetStat("Kills"));
-                    packet.Write((long)contribution.GetStat("Life Lost"));
-                    packet.Write((long)contribution.GetStat("Hits Taken"));
-                    packet.Write((long)contribution.GetStat("Deaths"));
+                    foreach (string stat in Contribution.StatNames)
+                        packet.Write((long)contribution.GetStat(stat));
                 }
                 packet.Send();
                 _packetTimer = PacketTimerMax;
-                Mod.Logger.Debug("Sent large packet.");
             }
             else if (!Main.CurrentFrameFlags.AnyActiveBossNPC && _oldAnyActiveBossNPC) // Boss just died
+            {
                 _stallTimer = StallTimerMax;
+            }
 
             _oldAnyActiveBossNPC = Main.CurrentFrameFlags.AnyActiveBossNPC;
         }
