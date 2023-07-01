@@ -15,8 +15,8 @@ namespace Leaderboards.UI
         private const float DataPanelWidth = MasterPanelWidth - 20f;
         private const float DataPanelHeight = MasterPanelHeight - 80f;
         private UIPanel _dataPanel;
+        private Dictionary<int, Dictionary<string, UIText>> _data;
         public static List<string> VisibleStats = Contribution.StatNames.ToList<string>();
-        private Dictionary<int, Dictionary<string, UIText>> _data = new();
 
         public override void OnInitialize()
         {
@@ -49,6 +49,8 @@ namespace Leaderboards.UI
             _dataPanel.Top.Set(55, 0);
             _dataPanel.HAlign = 0.5f;
             masterPanel.Append(_dataPanel);
+
+            _data = new Dictionary<int, Dictionary<string, UIText>>();
         }
 
         private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)

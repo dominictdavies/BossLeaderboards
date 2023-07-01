@@ -27,9 +27,7 @@ namespace Leaderboards
         public object GetStat(string statName) => _contribution[statName];
 
         public void IncreaseStat(int whoAmI, string statName, long amount = 1)
-        {
-            SetStat(whoAmI, statName, (long)_contribution[statName] + amount);
-        }
+            => SetStat(whoAmI, statName, (long)_contribution[statName] + amount);
 
         public void SetStat(int whoAmI, string statName, object value)
         {
