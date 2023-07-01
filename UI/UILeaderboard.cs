@@ -3,8 +3,6 @@ using System.Linq;
 using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
-using Terraria.Audio;
-using Terraria.ID;
 
 namespace Leaderboards.UI
 {
@@ -54,10 +52,7 @@ namespace Leaderboards.UI
         }
 
         private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)
-        {
-            ModContent.GetInstance<LeaderboardSystem>().HideMyUI();
-            SoundEngine.PlaySound(SoundID.MenuClose);
-        }
+            => ModContent.GetInstance<LeaderboardSystem>().HideMyUI();
 
         public void AddPlayer(int whoAmI, Contribution contribution)
         {

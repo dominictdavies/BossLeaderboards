@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.Audio;
 
 namespace Leaderboards.UI
 {
@@ -27,14 +29,18 @@ namespace Leaderboards.UI
             leaderboard = null;
         }
 
-        internal void ShowMyUI()
+        internal void ShowMyUI(bool playSound = true)
         {
             leaderboardInterface?.SetState(leaderboard);
+            if (playSound)
+                SoundEngine.PlaySound(SoundID.MenuOpen);
         }
 
-        internal void HideMyUI()
+        internal void HideMyUI(bool playSound = true)
         {
             leaderboardInterface?.SetState(null);
+            if (playSound)
+                SoundEngine.PlaySound(SoundID.MenuClose);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)

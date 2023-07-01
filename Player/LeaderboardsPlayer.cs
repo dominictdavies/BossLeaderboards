@@ -20,7 +20,7 @@ namespace Leaderboards
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             if (Main.CurrentFrameFlags.AnyActiveBossNPC)
-                ModContent.GetInstance<LeaderboardSystem>().ShowMyUI();
+                ModContent.GetInstance<LeaderboardSystem>().ShowMyUI(playSound: false);
 
             return true;
         }
