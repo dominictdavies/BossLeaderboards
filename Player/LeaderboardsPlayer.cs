@@ -25,6 +25,12 @@ namespace Leaderboards
             return true;
         }
 
+        public override void OnRespawn(Player player)
+        {
+            if (Main.CurrentFrameFlags.AnyActiveBossNPC)
+                ModContent.GetInstance<LeaderboardSystem>().HideMyUI(playSound: false);
+        }
+
         public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
             => _targetOldLife = target.life;
 
