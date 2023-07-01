@@ -55,5 +55,12 @@ namespace Leaderboards.UI
                 )
             );
         }
+
+        public override void UpdateUI(GameTime gameTime)
+        {
+            if (leaderboardInterface?.CurrentState != null)
+                leaderboardInterface.Update(gameTime);
+            _oldUpdateUiGameTime = gameTime;
+        }
     }
 }
