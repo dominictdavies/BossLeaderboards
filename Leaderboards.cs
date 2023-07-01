@@ -15,25 +15,23 @@ namespace Leaderboards
             }
             else if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                int playerCount = reader.ReadInt32();
-                for (int i = 0; i < playerCount; i++)
+                int trackedCount = reader.ReadInt32();
+                for (int i = 0; i < trackedCount; i++)
                 {
                     int recievedWhoAmI = reader.ReadInt32();
                     if (recievedWhoAmI == Main.myPlayer)
-                    {
                         reader.BaseStream.Position += Contribution.StatNames.Length * sizeof(long);
-                        continue;
-                    }
-                    UpdateContribution(reader, recievedWhoAmI);
+                    else
+                        UpdateContribution(reader, recievedWhoAmI);
                 }
             }
         }
 
         private void UpdateContribution(BinaryReader reader, int whoAmI)
         {
-            LeaderboardsPlayer leaderboardsPlayer = Main.player[whoAmI].GetModPlayer<LeaderboardsPlayer>();
+            Contribution contribution = Main.player[whoAmI].GetModPlayer<LeaderboardsPlayer>().contribution;
             foreach (string statName in Contribution.StatNames)
-                leaderboardsPlayer.contribution.SetStat(whoAmI, statName, reader.ReadInt64());
+                contribution.SetStat(whoAmI, statName, reader.ReadInt64());
         }
     }
 }
