@@ -19,14 +19,14 @@ namespace Leaderboards.UI
         {
             if (FightJustBegan())
             {
-                if (Main.netMode == NetmodeID.MultiplayerClient)
+                if (Main.netMode != NetmodeID.Server)
                     leaderboard.RemoveData();
                 _trackedPlayers = Utilities.GetActivePlayers();
                 foreach (Player player in _trackedPlayers)
                 {
                     LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
                     leaderboardsPlayer.contribution = new Contribution();
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    if (Main.netMode != NetmodeID.Server)
                         leaderboard.AddPlayer(player.whoAmI, leaderboardsPlayer.contribution);
                 }
             }

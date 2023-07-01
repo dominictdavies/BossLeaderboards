@@ -32,7 +32,7 @@ namespace Leaderboards
         public void SetStat(int whoAmI, string statName, object value)
         {
             _contribution[statName] = value;
-            if (Main.netMode == NetmodeID.MultiplayerClient)
+            if (Main.netMode != NetmodeID.Server)
                 ModContent.GetInstance<LeaderboardSystem>().leaderboard.UpdateCell(whoAmI, statName, value);
         }
     }
