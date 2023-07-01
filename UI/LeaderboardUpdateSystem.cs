@@ -15,7 +15,7 @@ namespace Leaderboards.UI
         private bool _oldAnyActiveBossNPC = false;
         private List<Player> _trackedPlayers;
 
-        public override void PreUpdateTime()
+        public override void PreUpdateEntities()
         {
             if (FightJustBegan())
             {
@@ -34,9 +34,9 @@ namespace Leaderboards.UI
             if ((Main.CurrentFrameFlags.AnyActiveBossNPC || --_stallTimer > 0) && --_packetTimer == 0)
             {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    SyncServerLeaderboard();
+                    ContributionToServer();
                 else if (Main.netMode == NetmodeID.Server)
-                    SyncClientLeaderboards();
+                    LeaderboardToClients();
 
                 _packetTimer = PacketTimerMax;
             }
@@ -44,7 +44,7 @@ namespace Leaderboards.UI
             if (FightJustEnded())
             {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                    SyncServerLeaderboard();
+                    ContributionToServer();
 
                 _stallTimer = StallTimerMax;
             }
@@ -58,7 +58,7 @@ namespace Leaderboards.UI
         private bool FightJustEnded()
             => !Main.CurrentFrameFlags.AnyActiveBossNPC && _oldAnyActiveBossNPC;
 
-        private void SyncServerLeaderboard()
+        private void ContributionToServer()
         {
             Contribution contribution = Main.LocalPlayer.GetModPlayer<LeaderboardsPlayer>().contribution;
             ModPacket packet = Mod.GetPacket();
@@ -67,7 +67,7 @@ namespace Leaderboards.UI
             packet.Send();
         }
 
-        private void SyncClientLeaderboards()
+        private void LeaderboardToClients()
         {
             List<Player> activeTracked = _trackedPlayers.Where(player => player.active).ToList();
             ModPacket packet = Mod.GetPacket();
