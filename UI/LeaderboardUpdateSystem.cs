@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
@@ -18,31 +17,28 @@ namespace Leaderboards.UI
 
         public override void PreUpdateTime()
         {
-            if (Main.CurrentFrameFlags.AnyActiveBossNPC || --_stallTimer > 0)
+            if (FightJustBegan())
             {
-                if (FightJustBegan())
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    leaderboard.RemoveData();
+                _trackedPlayers = Utilities.GetActivePlayers();
+                foreach (Player player in _trackedPlayers)
                 {
+                    LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
+                    leaderboardsPlayer.contribution = new Contribution();
                     if (Main.netMode == NetmodeID.MultiplayerClient)
-                        leaderboard.RemoveData();
-                    _trackedPlayers = Utilities.GetActivePlayers();
-                    foreach (Player player in _trackedPlayers)
-                    {
-                        LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
-                        leaderboardsPlayer.contribution = new Contribution();
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                            leaderboard.AddPlayer(player.whoAmI, leaderboardsPlayer.contribution);
-                    }
+                        leaderboard.AddPlayer(player.whoAmI, leaderboardsPlayer.contribution);
                 }
+            }
 
-                if (--_packetTimer == 0)
-                {
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        SyncServerLeaderboard();
-                    else if (Main.netMode == NetmodeID.Server)
-                        SyncClientLeaderboards();
+            if ((Main.CurrentFrameFlags.AnyActiveBossNPC || --_stallTimer > 0) && --_packetTimer == 0)
+            {
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    SyncServerLeaderboard();
+                else if (Main.netMode == NetmodeID.Server)
+                    SyncClientLeaderboards();
 
-                    _packetTimer = PacketTimerMax;
-                }
+                _packetTimer = PacketTimerMax;
             }
 
             if (FightJustEnded())
