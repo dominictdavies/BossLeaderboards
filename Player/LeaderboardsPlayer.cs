@@ -16,7 +16,6 @@ namespace Leaderboards
             LeaderboardSystem leaderboardSystem = ModContent.GetInstance<LeaderboardSystem>();
             UILeaderboard leaderboard = leaderboardSystem.leaderboard;
             leaderboard.RemoveData(true);
-            leaderboardSystem.ShowMyUI();
         }
 
         public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
