@@ -9,6 +9,8 @@ namespace Leaderboards
     {
         private int _targetOldLife;
         private int _playerOldLife;
+        private bool _bossDeath;
+        private bool _keepUIShown;
         public Contribution contribution = new Contribution();
 
         public override void OnEnterWorld(Player player)
@@ -20,15 +22,26 @@ namespace Leaderboards
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
             if (Main.CurrentFrameFlags.AnyActiveBossNPC)
-                ModContent.GetInstance<LeaderboardSystem>().ShowMyUI(playSound: false);
+            {
+                LeaderboardSystem leaderboardSystem = ModContent.GetInstance<LeaderboardSystem>();
+
+                _bossDeath = true;
+                if (leaderboardSystem.leaderboardInterface.CurrentState != null)
+                    _keepUIShown = true;
+
+                leaderboardSystem.ShowMyUI(playSound: false);
+            }
 
             return true;
         }
 
         public override void OnRespawn(Player player)
         {
-            if (Main.CurrentFrameFlags.AnyActiveBossNPC)
+            if (_bossDeath && !_keepUIShown)
                 ModContent.GetInstance<LeaderboardSystem>().HideMyUI(playSound: false);
+
+            _bossDeath = false;
+            _keepUIShown = false;
         }
 
         public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
