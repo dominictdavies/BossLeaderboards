@@ -13,9 +13,16 @@ namespace Leaderboards
 
         public override void OnEnterWorld(Player player)
         {
-            LeaderboardSystem leaderboardSystem = ModContent.GetInstance<LeaderboardSystem>();
-            UILeaderboard leaderboard = leaderboardSystem.leaderboard;
+            UILeaderboard leaderboard = ModContent.GetInstance<LeaderboardSystem>().leaderboard;
             leaderboard.RemoveData(true);
+        }
+
+        public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+        {
+            if (Main.CurrentFrameFlags.AnyActiveBossNPC)
+                ModContent.GetInstance<LeaderboardSystem>().ShowMyUI();
+
+            return true;
         }
 
         public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
