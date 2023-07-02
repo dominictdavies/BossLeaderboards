@@ -19,25 +19,9 @@ namespace Leaderboards
             leaderboard.RemoveData(true);
         }
 
-        public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
-        {
-            if (Main.CurrentFrameFlags.AnyActiveBossNPC)
-            {
-                LeaderboardSystem leaderboardSystem = ModContent.GetInstance<LeaderboardSystem>();
-
-                _bossDeath = true;
-                if (leaderboardSystem.leaderboardInterface.CurrentState != null)
-                    _keepUIShown = true;
-
-                leaderboardSystem.ShowMyUI(playSound: false);
-            }
-
-            return true;
-        }
-
         public override void OnRespawn(Player player)
         {
-            if (_bossDeath && !_keepUIShown)
+            if (player.whoAmI == Main.myPlayer && _bossDeath && !_keepUIShown)
                 ModContent.GetInstance<LeaderboardSystem>().HideMyUI(playSound: false);
 
             _bossDeath = false;
@@ -80,6 +64,17 @@ namespace Leaderboards
         {
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
                 return;
+
+            if (Player.whoAmI == Main.myPlayer)
+            {
+                LeaderboardSystem leaderboardSystem = ModContent.GetInstance<LeaderboardSystem>();
+
+                _bossDeath = true;
+                if (leaderboardSystem.leaderboardInterface.CurrentState != null)
+                    _keepUIShown = true;
+
+                leaderboardSystem.ShowMyUI(playSound: false);
+            }
 
             contribution.IncreaseStat(Player.whoAmI, "Deaths");
         }
