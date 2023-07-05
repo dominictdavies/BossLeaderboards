@@ -17,6 +17,7 @@ namespace Leaderboards.UI
         private UIPanel _dataPanel;
         private UIPanel _playerPanel;
         private UIPanel _statPanel;
+        private UIText _awaitingText;
         private Dictionary<int, Dictionary<string, UIText>> _data;
         public static List<string> VisibleStats = Contribution.StatNames.ToList<string>();
 
@@ -55,16 +56,21 @@ namespace Leaderboards.UI
             _playerPanel = new UIPanel();
             _playerPanel.Width.Set(PlayerPanelWidth, 0);
             _playerPanel.Height.Set(DataPanelHeight, 0);
-            _playerPanel.HAlign = _playerPanel.VAlign = 0.5f;
+            _playerPanel.Left.Set(-PlayerPanelWidth, 0);
+            _playerPanel.VAlign = 0.5f;
             _dataPanel.Append(_playerPanel);
 
             _statPanel = new UIPanel();
             _statPanel.Width.Set(DataPanelWidth, 0);
             _statPanel.Height.Set(StatPanelHeight, 0);
-            _statPanel.HAlign = _playerPanel.VAlign = 0.5f;
+            _statPanel.Top.Set(-StatPanelHeight, 0);
+            _statPanel.HAlign = 0.5f;
             _dataPanel.Append(_statPanel);
 
             _data = new Dictionary<int, Dictionary<string, UIText>>();
+
+            _awaitingText = new UIText("Awaiting boss fight...");
+            _awaitingText.HAlign = _awaitingText.VAlign = 0.5f;
         }
 
         private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)
@@ -90,17 +96,16 @@ namespace Leaderboards.UI
         public void UpdateCell(int whoAmI, string statName, object value)
             => _data[whoAmI][statName].SetText(value.ToString());
 
-        public void RemoveData(bool showAwaitingText = false)
+        public void RemoveAllData(bool showAwaitingText = false)
         {
-            _dataPanel.RemoveAllChildren();
+            foreach (KeyValuePair<int, Dictionary<string, UIText>> player in _data)
+                foreach (KeyValuePair<string, UIText> stat in player.Value)
+                    _dataPanel.RemoveChild(stat.Value);
             _data.Clear();
 
+            _awaitingText.Remove();
             if (showAwaitingText)
-            {
-                UIText awaitingText = new UIText("Awaiting boss fight...");
-                awaitingText.HAlign = awaitingText.VAlign = 0.5f;
-                _dataPanel.Append(awaitingText);
-            }
+                _dataPanel.Append(_awaitingText);
         }
     }
 }

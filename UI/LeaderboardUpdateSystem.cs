@@ -20,7 +20,7 @@ namespace Leaderboards.UI
             if (FightJustBegan())
             {
                 if (Main.netMode != NetmodeID.Server)
-                    leaderboard.RemoveData();
+                    leaderboard.RemoveAllData();
                 _trackedPlayers = Utilities.GetActivePlayers();
                 foreach (Player player in _trackedPlayers)
                 {

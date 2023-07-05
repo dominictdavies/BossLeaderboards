@@ -16,7 +16,7 @@ namespace Leaderboards
         public override void OnEnterWorld(Player player)
         {
             UILeaderboard leaderboard = ModContent.GetInstance<LeaderboardSystem>().leaderboard;
-            leaderboard.RemoveData(true);
+            leaderboard.RemoveAllData(true);
         }
 
         public override void OnRespawn(Player player)
