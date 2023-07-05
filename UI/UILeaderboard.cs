@@ -12,7 +12,11 @@ namespace Leaderboards.UI
         private const float MasterPanelHeight = 300f;
         private const float DataPanelWidth = MasterPanelWidth - 20f;
         private const float DataPanelHeight = MasterPanelHeight - 80f;
+        private const float PlayerPanelWidth = 80f;
+        private const float StatPanelHeight = 40f;
         private UIPanel _dataPanel;
+        private UIPanel _playerPanel;
+        private UIPanel _statPanel;
         private Dictionary<int, Dictionary<string, UIText>> _data;
         public static List<string> VisibleStats = Contribution.StatNames.ToList<string>();
 
@@ -47,6 +51,18 @@ namespace Leaderboards.UI
             _dataPanel.Top.Set(55, 0);
             _dataPanel.HAlign = 0.5f;
             masterPanel.Append(_dataPanel);
+
+            _playerPanel = new UIPanel();
+            _playerPanel.Width.Set(PlayerPanelWidth, 0);
+            _playerPanel.Height.Set(DataPanelHeight, 0);
+            _playerPanel.HAlign = _playerPanel.VAlign = 0.5f;
+            _dataPanel.Append(_playerPanel);
+
+            _statPanel = new UIPanel();
+            _statPanel.Width.Set(DataPanelWidth, 0);
+            _statPanel.Height.Set(StatPanelHeight, 0);
+            _statPanel.HAlign = _playerPanel.VAlign = 0.5f;
+            _dataPanel.Append(_statPanel);
 
             _data = new Dictionary<int, Dictionary<string, UIText>>();
         }
