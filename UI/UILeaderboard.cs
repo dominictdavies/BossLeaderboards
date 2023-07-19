@@ -12,6 +12,8 @@ namespace Leaderboards.UI
         private const float MasterPanelHeight = 300f;
         private const float DataPanelWidth = MasterPanelWidth - 20f;
         private const float DataPanelHeight = MasterPanelHeight - 80f;
+        private const float DataPanelTop = 55f;
+        private const float DataPanelLeft = 0f;
         private const float PlayerPanelWidth = 80f;
         private const float StatPanelHeight = 40f;
         private UIPanel _dataPanel;
@@ -49,23 +51,23 @@ namespace Leaderboards.UI
             _dataPanel = new UIPanel();
             _dataPanel.Width.Set(DataPanelWidth, 0);
             _dataPanel.Height.Set(DataPanelHeight, 0);
-            _dataPanel.Top.Set(55, 0);
-            _dataPanel.HAlign = 0.5f;
+            _dataPanel.Top.Set(DataPanelTop, 0);
+            _dataPanel.Left.Set(DataPanelLeft, 0);
             masterPanel.Append(_dataPanel);
 
             _playerPanel = new UIPanel();
             _playerPanel.Width.Set(PlayerPanelWidth, 0);
             _playerPanel.Height.Set(DataPanelHeight, 0);
-            _playerPanel.Left.Set(-PlayerPanelWidth, 0);
-            _playerPanel.VAlign = 0.5f;
-            _dataPanel.Append(_playerPanel);
+            _playerPanel.Top.Set(DataPanelTop, 0);
+            _playerPanel.Left.Set(DataPanelLeft - PlayerPanelWidth, 0);
+            masterPanel.Append(_playerPanel);
 
             _statPanel = new UIPanel();
             _statPanel.Width.Set(DataPanelWidth, 0);
             _statPanel.Height.Set(StatPanelHeight, 0);
-            _statPanel.Top.Set(-StatPanelHeight, 0);
-            _statPanel.HAlign = 0.5f;
-            _dataPanel.Append(_statPanel);
+            _statPanel.Top.Set(DataPanelTop - StatPanelHeight, 0);
+            _statPanel.Left.Set(DataPanelLeft, 0);
+            masterPanel.Append(_statPanel);
 
             _data = new Dictionary<int, Dictionary<string, UIText>>();
 
