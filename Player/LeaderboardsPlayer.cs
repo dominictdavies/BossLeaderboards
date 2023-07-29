@@ -7,57 +7,44 @@ namespace Leaderboards
 {
     internal partial class LeaderboardsPlayer : ModPlayer
     {
-        private int _targetOldLife;
-        private int _playerOldLife;
         private bool _bossDeath;
         private bool _keepUIShown;
         public Contribution contribution = new Contribution();
 
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld()
         {
             UILeaderboard leaderboard = ModContent.GetInstance<LeaderboardSystem>().leaderboard;
             leaderboard.RemoveData(true);
         }
 
-        public override void OnRespawn(Player player)
+        public override void OnRespawn()
         {
-            if (player.whoAmI == Main.myPlayer && _bossDeath && !_keepUIShown)
+            if (Player.whoAmI == Main.myPlayer && _bossDeath && !_keepUIShown)
                 ModContent.GetInstance<LeaderboardSystem>().HideMyUI(playSound: false);
 
             _bossDeath = false;
             _keepUIShown = false;
         }
 
-        public void PreHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
-            => _targetOldLife = target.life;
-
-        public void PreHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
-            => _playerOldLife = Player.statLife;
-
-        public void PostHitNPCWithAnything(NPC target, int damage, float knockback, bool crit, Item item = null, Projectile proj = null)
+        public void OnHitNPCWithAnything(NPC target, NPC.HitInfo hit, int damageDone, Item item = null, Projectile proj = null)
         {
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
                 return;
 
-            int damageDealt = target.life > 0 ? _targetOldLife - target.life : _targetOldLife;
-            if (damageDealt > 0)
-                contribution.IncreaseStat(Player.whoAmI, "Damage", damageDealt);
+            if (damageDone > 0)
+                contribution.IncreaseStat(Player.whoAmI, "Damage", damageDone);
 
-            if (target.life <= 0 && _targetOldLife > 0)
+            if (target.life <= 0)
                 contribution.IncreaseStat(Player.whoAmI, "Kills");
         }
 
-        public void PostHitByAnything(int damage, bool crit, NPC npc = null, Projectile proj = null)
+        public void OnHitByAnything(Player.HurtInfo hurtInfo, NPC npc = null, Projectile proj = null)
         {
             if (!Main.CurrentFrameFlags.AnyActiveBossNPC)
                 return;
 
-            int lifeLost = Player.statLife > 0 ? _playerOldLife - Player.statLife : _playerOldLife;
-            if (lifeLost > 0)
-            {
-                contribution.IncreaseStat(Player.whoAmI, "Life Lost", lifeLost);
-                contribution.IncreaseStat(Player.whoAmI, "Hits Taken");
-            }
+            contribution.IncreaseStat(Player.whoAmI, "Life Lost", hurtInfo.Damage);
+            contribution.IncreaseStat(Player.whoAmI, "Hits Taken");
         }
 
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
