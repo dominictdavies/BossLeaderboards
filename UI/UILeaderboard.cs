@@ -39,7 +39,7 @@ namespace Leaderboards.UI
             closeButton.Height.Set(30, 0);
             closeButton.Top.Set(10, 0);
             closeButton.Left.Set(-10 - closeButton.Width.Pixels, 1);
-            closeButton.OnClick += OnCloseButtonClick;
+            closeButton.OnLeftClick += OnCloseButtonClick;
             masterPanel.Append(closeButton);
 
             UIText closeText = new UIText("X");
