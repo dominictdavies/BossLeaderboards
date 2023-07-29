@@ -13,15 +13,15 @@ namespace Leaderboards
         private bool _keepUIShown;
         public Contribution contribution = new Contribution();
 
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld()
         {
             UILeaderboard leaderboard = ModContent.GetInstance<LeaderboardSystem>().leaderboard;
             leaderboard.RemoveData(true);
         }
 
-        public override void OnRespawn(Player player)
+        public override void OnRespawn()
         {
-            if (player.whoAmI == Main.myPlayer && _bossDeath && !_keepUIShown)
+            if (Player.whoAmI == Main.myPlayer && _bossDeath && !_keepUIShown)
                 ModContent.GetInstance<LeaderboardSystem>().HideMyUI(playSound: false);
 
             _bossDeath = false;
