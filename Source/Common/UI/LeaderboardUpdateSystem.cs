@@ -23,7 +23,7 @@ namespace BossLeaderboards.UI
             {
                 if (Main.netMode != NetmodeID.Server)
                     leaderboard.RemoveData();
-                _trackedPlayers = Utilities.GetActivePlayers();
+                _trackedPlayers = Utilities.GetActivePlayers(Main.player);
                 foreach (Player player in _trackedPlayers)
                 {
                     LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();

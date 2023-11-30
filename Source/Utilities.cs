@@ -1,19 +1,14 @@
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 
 namespace BossLeaderboards.Source
 {
     public static class Utilities
     {
-        public static List<Player> GetActivePlayers()
+        public static List<Player> GetActivePlayers(Player[] players)
         {
-            List<Player> activePlayers = new List<Player>();
-            for (int i = 0; i < Main.maxPlayers; i++)
-            {
-                Player player = Main.player[i];
-                if (player.active)
-                    activePlayers.Add(player);
-            }
+            var activePlayers = players.Where(player => player.active).ToList();
             return activePlayers;
         }
     }
