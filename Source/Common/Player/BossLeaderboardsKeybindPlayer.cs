@@ -1,9 +1,8 @@
-using Leaderboards.UI;
-using Leaderboards.Keybinds;
+using BossLeaderboards.UI;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 
-namespace ExampleMod.Common.Players
+namespace BossLeaderboards.Source.Common.Player
 {
     public class ExampleKeybindPlayer : ModPlayer
     {

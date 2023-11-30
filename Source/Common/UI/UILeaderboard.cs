@@ -3,8 +3,10 @@ using System.Linq;
 using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
+using BossLeaderboards.UI;
+using BossLeaderboards.Source.Common.Player;
 
-namespace Leaderboards.UI
+namespace BossLeaderboards.Source.Common.UI
 {
     internal class UILeaderboard : UIState
     {
@@ -19,7 +21,7 @@ namespace Leaderboards.UI
         private UIPanel _statPanel;
         private UIText _awaitingText;
         private Dictionary<int, Dictionary<string, UIText>> _data;
-        public static List<string> VisibleStats = Contribution.StatNames.ToList<string>();
+        public static List<string> VisibleStats = Contribution.StatNames.ToList();
 
         public override void OnInitialize()
         {
@@ -88,7 +90,7 @@ namespace Leaderboards.UI
         {
             UIText statText = new UIText(value);
             statText.VAlign = 0.1f * (_data.Count - 1);
-            statText.HAlign = 1f / VisibleStats.Count * ((float)VisibleStats.IndexOf(statName) + 0.5f);
+            statText.HAlign = 1f / VisibleStats.Count * (VisibleStats.IndexOf(statName) + 0.5f);
             _dataPanel.Append(statText);
             _data[whoAmI].Add(statName, statText);
         }

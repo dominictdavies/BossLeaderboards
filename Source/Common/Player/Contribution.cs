@@ -1,10 +1,10 @@
-using Leaderboards.UI;
+using BossLeaderboards.UI;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using System.Collections.Generic;
 
-namespace Leaderboards
+namespace BossLeaderboards.Source.Common.Player
 {
     internal class Contribution
     {
@@ -13,13 +13,13 @@ namespace Leaderboards
 
         public Contribution()
         {
-            this._contribution = new Dictionary<string, object>();
+            _contribution = new Dictionary<string, object>();
             Reset();
         }
 
         public void Reset()
         {
-            this._contribution.Clear();
+            _contribution.Clear();
             foreach (string statName in StatNames)
                 _contribution.Add(statName, 0L);
         }

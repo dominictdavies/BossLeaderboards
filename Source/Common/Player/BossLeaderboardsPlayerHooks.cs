@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace Leaderboards
+namespace BossLeaderboards
 {
     internal partial class LeaderboardsPlayer : ModPlayer
     {
