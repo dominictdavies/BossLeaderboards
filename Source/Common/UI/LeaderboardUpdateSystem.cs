@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using BossLeaderboards.Source;
+using BossLeaderboards.Source.Common.Player;
 
 namespace BossLeaderboards.UI
 {

@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace BossLeaderboards.UI
+namespace BossLeaderboards.Source.Common.UI
 {
     // This DragableUIPanel class inherits from UIPanel. 
     // Inheriting is a great tool for UI design. By inheriting, we get the background drawing for free from UIPanel

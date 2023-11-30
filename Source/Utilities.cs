@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Terraria;
 
-namespace BossLeaderboards
+namespace BossLeaderboards.Source
 {
     public static class Utilities
     {

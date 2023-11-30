@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using System.Collections.Generic;
 
-namespace BossLeaderboards
+namespace BossLeaderboards.Source.Common.Player
 {
     internal class Contribution
     {
@@ -13,13 +13,13 @@ namespace BossLeaderboards
 
         public Contribution()
         {
-            this._contribution = new Dictionary<string, object>();
+            _contribution = new Dictionary<string, object>();
             Reset();
         }
 
         public void Reset()
         {
-            this._contribution.Clear();
+            _contribution.Clear();
             foreach (string statName in StatNames)
                 _contribution.Add(statName, 0L);
         }

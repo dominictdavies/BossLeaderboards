@@ -5,6 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.Audio;
+using BossLeaderboards.Source.Common.UI;
 
 namespace BossLeaderboards.UI
 {

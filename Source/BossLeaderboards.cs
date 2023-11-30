@@ -2,8 +2,9 @@ using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using BossLeaderboards.Source.Common.Player;
 
-namespace BossLeaderboards
+namespace BossLeaderboards.Source
 {
     internal class BossLeaderboards : Mod
     {

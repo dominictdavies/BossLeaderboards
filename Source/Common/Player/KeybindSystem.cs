@@ -1,6 +1,6 @@
 using Terraria.ModLoader;
 
-namespace BossLeaderboards.Keybinds
+namespace BossLeaderboards.Source.Common.Player
 {
     internal class KeybindSystem : ModSystem
     {
