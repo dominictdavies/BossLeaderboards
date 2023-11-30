@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using BossLeaderboards.Source;
+using BossLeaderboards.Source.Common.Player;
 
-namespace Leaderboards.UI
+namespace BossLeaderboards.UI
 {
     internal partial class LeaderboardSystem : ModSystem
     {
@@ -21,7 +23,7 @@ namespace Leaderboards.UI
             {
                 if (Main.netMode != NetmodeID.Server)
                     leaderboard.RemoveData();
-                _trackedPlayers = Utilities.GetActivePlayers();
+                _trackedPlayers = Utilities.GetActivePlayers(Main.player);
                 foreach (Player player in _trackedPlayers)
                 {
                     LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();

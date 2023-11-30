@@ -2,10 +2,11 @@ using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
+using BossLeaderboards.Source.Common.Player;
 
-namespace Leaderboards
+namespace BossLeaderboards.Source
 {
-    internal class Leaderboards : Mod
+    internal class BossLeaderboards : Mod
     {
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {

@@ -1,9 +1,11 @@
-using Leaderboards.UI;
+using BossLeaderboards.Source.Common.Player;
+using BossLeaderboards.Source.Common.UI;
+using BossLeaderboards.UI;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
-namespace Leaderboards
+namespace BossLeaderboards
 {
     internal partial class LeaderboardsPlayer : ModPlayer
     {
