@@ -4,7 +4,7 @@ using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 
-namespace Leaderboards.UI
+namespace BossLeaderboards.UI
 {
     internal class UILeaderboard : UIState
     {

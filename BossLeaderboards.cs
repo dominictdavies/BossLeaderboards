@@ -3,9 +3,9 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 
-namespace Leaderboards
+namespace BossLeaderboards
 {
-    internal class Leaderboards : Mod
+    internal class BossLeaderboards : Mod
     {
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {

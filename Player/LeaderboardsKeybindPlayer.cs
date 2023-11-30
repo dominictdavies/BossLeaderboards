@@ -1,5 +1,5 @@
-using Leaderboards.UI;
-using Leaderboards.Keybinds;
+using BossLeaderboards.UI;
+using BossLeaderboards.Keybinds;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 

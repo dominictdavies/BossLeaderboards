@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.Audio;
 
-namespace Leaderboards.UI
+namespace BossLeaderboards.UI
 {
     internal partial class LeaderboardSystem : ModSystem
     {
@@ -50,7 +50,7 @@ namespace Leaderboards.UI
                 return;
 
             layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
-                "Leaderboards: LeaderboardInterface",
+                "BossLeaderboards: LeaderboardInterface",
                 delegate
                 {
                     if (_oldUpdateUiGameTime != null && leaderboardInterface?.CurrentState != null)

@@ -1,10 +1,10 @@
-using Leaderboards.UI;
+using BossLeaderboards.UI;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using System.Collections.Generic;
 
-namespace Leaderboards
+namespace BossLeaderboards
 {
     internal class Contribution
     {

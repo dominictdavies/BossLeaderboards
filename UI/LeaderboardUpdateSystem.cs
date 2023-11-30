@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 
-namespace Leaderboards.UI
+namespace BossLeaderboards.UI
 {
     internal partial class LeaderboardSystem : ModSystem
     {
