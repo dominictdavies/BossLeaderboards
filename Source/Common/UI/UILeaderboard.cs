@@ -34,11 +34,13 @@ namespace BossLeaderboards.Source.Common.UI
             };
             masterPanel.Width.Set(MasterPanelWidth, 0);
             masterPanel.Height.Set(MasterPanelHeight, 0);
+            masterPanel.SetPadding(0f);
             Append(masterPanel);
 
             UIElement titleRect = new();
             titleRect.Width.Set(MasterPanelWidth, 0);
             titleRect.Height.Set(Margin * 2, 0);
+            titleRect.SetPadding(0f);
             masterPanel.Append(titleRect);
 
             UIText title = new("Leaderboard") {
@@ -61,6 +63,13 @@ namespace BossLeaderboards.Source.Common.UI
                 VAlign = 0.5f
             };
             closeButton.Append(closeText);
+
+            UIElement dataRect = new();
+            dataRect.Width.Set(MasterPanelWidth, 0);
+            dataRect.Height.Set(MasterPanelHeight - Margin * 2, 0);
+            dataRect.Top.Set(Margin * 2, 0);
+            dataRect.SetPadding(0f);
+            masterPanel.Append(dataRect);
 
             _playerPanel = new();
             _playerPanel.Width.Set(PlayerPanelWidth, 0);
