@@ -36,19 +36,25 @@ namespace BossLeaderboards.Source.Common.UI
             masterPanel.Height.Set(MasterPanelHeight, 0);
             Append(masterPanel);
 
-            UIText title = new("Leaderboard") {
-                HAlign = 0.5f
-            };
-            title.Top.Set(Margin, 0);
-            masterPanel.Append(title);
+            UIElement titleRect = new();
+            titleRect.Width.Set(MasterPanelWidth, 0);
+            titleRect.Height.Set(Margin * 2, 0);
+            masterPanel.Append(titleRect);
 
-            UIPanel closeButton = new();
+            UIText title = new("Leaderboard") {
+                HAlign = 0.5f,
+                VAlign = 0.5f
+            };
+            titleRect.Append(title);
+
+            UIPanel closeButton = new() {
+                VAlign = 0.5f
+            };
             closeButton.Width.Set(CloseButtonWidth, 0);
             closeButton.Height.Set(CloseButtonWidth, 0);
-            closeButton.Top.Set(Margin, 0);
-            closeButton.Left.Set(-Margin - CloseButtonWidth, 1);
+            closeButton.Left.Set(-Margin - CloseButtonWidth / 2, 1);
             closeButton.OnLeftClick += OnCloseButtonClick;
-            masterPanel.Append(closeButton);
+            titleRect.Append(closeButton);
 
             UIText closeText = new("X") {
                 HAlign = 0.5f,
