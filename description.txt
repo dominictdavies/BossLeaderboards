@@ -1,1 +1,15 @@
-Boss Leaderboards is a pretty cool mod, it does...this. Modify this file with a description of your mod.
+-=- Boss Leaderboards -=-
+
+This is a multiplayer mod that adds a leaderboard for tracking various stats during boss fights.
+The leaderboard can be opened by using the "Show leaderboard" keybind (L by default).
+The currently tracked stats are:
+- Damage
+- Kills
+- Life Lost
+- Hits Taken
+- Deaths
+
+= Changelog =
+
+v0.1:
+- Initial release
