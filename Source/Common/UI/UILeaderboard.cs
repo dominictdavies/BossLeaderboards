@@ -11,10 +11,14 @@ namespace BossLeaderboards.Source.Common.UI
     {
         private const float MasterPanelWidth = 600f;
         private const float MasterPanelHeight = 300f;
-        private const float DataPanelWidth = MasterPanelWidth - 20f;
-        private const float DataPanelHeight = MasterPanelHeight - 80f;
         private const float PlayerPanelWidth = 80f;
         private const float StatPanelHeight = 40f;
+        private const float CloseButtonWidth = 30f;
+        private const float Margin = 30f;
+
+        private const float DataPanelWidth = MasterPanelWidth - PlayerPanelWidth - Margin * 2;
+        private const float DataPanelHeight = MasterPanelHeight - StatPanelHeight - Margin * 3;
+
         private UIPanel _dataPanel;
         private UIPanel _playerPanel;
         private UIPanel _statPanel;
@@ -24,56 +28,60 @@ namespace BossLeaderboards.Source.Common.UI
 
         public override void OnInitialize()
         {
-            UIDragablePanel masterPanel = new();
+            UIDragablePanel masterPanel = new() {
+                HAlign = 0.5f,
+                VAlign = 0.5f
+            };
             masterPanel.Width.Set(MasterPanelWidth, 0);
             masterPanel.Height.Set(MasterPanelHeight, 0);
-            masterPanel.HAlign = masterPanel.VAlign = 0.5f;
             Append(masterPanel);
 
             UIText title = new("Leaderboard") {
                 HAlign = 0.5f
             };
-            title.Top.Set(15, 0);
+            title.Top.Set(Margin, 0);
             masterPanel.Append(title);
 
             UIPanel closeButton = new();
-            closeButton.Width.Set(30, 0);
-            closeButton.Height.Set(30, 0);
-            closeButton.Top.Set(10, 0);
-            closeButton.Left.Set(-10 - closeButton.Width.Pixels, 1);
+            closeButton.Width.Set(CloseButtonWidth, 0);
+            closeButton.Height.Set(CloseButtonWidth, 0);
+            closeButton.Top.Set(Margin, 0);
+            closeButton.Left.Set(-Margin - CloseButtonWidth, 1);
             closeButton.OnLeftClick += OnCloseButtonClick;
             masterPanel.Append(closeButton);
 
             UIText closeText = new("X") {
-                HAlign = VAlign = 0.5f
+                HAlign = 0.5f,
+                VAlign = 0.5f
             };
             closeButton.Append(closeText);
-
-            _dataPanel = new();
-            _dataPanel.Width.Set(DataPanelWidth, 0);
-            _dataPanel.Height.Set(DataPanelHeight, 0);
-            _dataPanel.Top.Set(55f, 0);
-            _dataPanel.Left.Set(0f, 0);
-            masterPanel.Append(_dataPanel);
 
             _playerPanel = new();
             _playerPanel.Width.Set(PlayerPanelWidth, 0);
             _playerPanel.Height.Set(DataPanelHeight, 0);
-            _playerPanel.Top.Set(_dataPanel.Top.Pixels, 0);
-            _playerPanel.Left.Set(_dataPanel.Left.Pixels - PlayerPanelWidth, 0);
+            _playerPanel.Top.Set(Margin * 2 + StatPanelHeight, 0);
+            _playerPanel.Left.Set(Margin, 0);
             masterPanel.Append(_playerPanel);
 
             _statPanel = new();
             _statPanel.Width.Set(DataPanelWidth, 0);
             _statPanel.Height.Set(StatPanelHeight, 0);
-            _statPanel.Top.Set(_dataPanel.Top.Pixels - StatPanelHeight, 0);
-            _statPanel.Left.Set(_dataPanel.Left.Pixels, 0);
+            _statPanel.Top.Set(Margin * 2, 0);
+            _statPanel.Left.Set(Margin + PlayerPanelWidth, 0);
             masterPanel.Append(_statPanel);
+
+            _dataPanel = new();
+            _dataPanel.Width.Set(DataPanelWidth, 0);
+            _dataPanel.Height.Set(DataPanelHeight, 0);
+            _dataPanel.Top.Set(Margin * 2 + StatPanelHeight, 0);
+            _dataPanel.Left.Set(Margin + PlayerPanelWidth, 0);
+            masterPanel.Append(_dataPanel);
 
             _data = new();
 
             _awaitingText = new("Awaiting boss fight...") {
-                HAlign = VAlign = 0.5f
+                HAlign = 0.5f,
+                VAlign = 0.5f
             };
         }
 
@@ -91,8 +99,8 @@ namespace BossLeaderboards.Source.Common.UI
         private void AddCell(int whoAmI, string statName, string value)
         {
             UIText statText = new(value) {
-                VAlign = 0.1f * (_data.Count - 1),
-                HAlign = 1f / VisibleStats.Count * (VisibleStats.IndexOf(statName) + 0.5f)
+                HAlign = 1f / VisibleStats.Count * (VisibleStats.IndexOf(statName) + 0.5f),
+                VAlign = 0.1f * (_data.Count - 1)
             };
             _dataPanel.Append(statText);
             _data[whoAmI].Add(statName, statText);
