@@ -64,13 +64,6 @@ namespace BossLeaderboards.Source.Common.UI
             };
             closeButton.Append(closeText);
 
-            UIElement dataRect = new();
-            dataRect.Width.Set(MasterPanelWidth, 0);
-            dataRect.Height.Set(MasterPanelHeight - Margin * 2, 0);
-            dataRect.Top.Set(Margin * 2, 0);
-            dataRect.SetPadding(0f);
-            masterPanel.Append(dataRect);
-
             _playerPanel = new();
             _playerPanel.Width.Set(PlayerPanelWidth, 0);
             _playerPanel.Height.Set(DataPanelHeight, 0);
