@@ -7,7 +7,7 @@ namespace BossLeaderboards.Source.Common.Player
         public static ModKeybind ShowLeaderboardKeybind { get; private set; }
 
         public override void Load()
-            => ShowLeaderboardKeybind = KeybindLoader.RegisterKeybind(Mod, "ShowLeaderboard", "L");
+            => ShowLeaderboardKeybind = KeybindLoader.RegisterKeybind(Mod, "Show leaderboard", "L");
 
         public override void Unload()
             => ShowLeaderboardKeybind = null;
