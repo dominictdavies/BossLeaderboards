@@ -1,28 +1,28 @@
-﻿using BossLeaderboards.UI;
-using BossLeaderboards.Source.Common.Player;
+﻿using BossLeaderboards.Source.Common.Player;
+using BossLeaderboards.UI;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace BossLeaderboards.Source.Common.UI
 {
     internal class UILeaderboard : UIState
     {
-        private const float MasterPanelWidth = 600f;
+        private const float MasterPanelWidth = 1400f;
         private const float MasterPanelHeight = 300f;
-        private const float PlayerPanelWidth = 80f;
         private const float StatPanelHeight = 40f;
+        private const float PlayerPanelWidth = 80f;
         private const float CloseButtonWidth = 30f;
         private const float Margin = 30f;
 
         private const float DataPanelWidth = MasterPanelWidth - PlayerPanelWidth - Margin * 2;
         private const float DataPanelHeight = MasterPanelHeight - StatPanelHeight - Margin * 3;
 
-        private UIPanel _dataPanel;
-        private UIPanel _playerPanel;
         private UIPanel _statPanel;
+        private UIPanel _playerPanel;
+        private UIPanel _dataPanel;
         private UIText _awaitingText;
         private Dictionary<int, Dictionary<string, UIText>> _data;
         public static List<string> VisibleStats = new(Contribution.StatNames);
@@ -96,6 +96,17 @@ namespace BossLeaderboards.Source.Common.UI
 
         private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)
             => ModContent.GetInstance<LeaderboardSystem>().HideMyUI();
+
+        public void AddStatHeadings()
+        {
+            foreach (string statName in VisibleStats) {
+                UIText statHeading = new(statName) {
+                    HAlign = 1f / VisibleStats.Count * (VisibleStats.IndexOf(statName) + 0.5f),
+                    VAlign = 0.5f
+                };
+                _statPanel.Append(statHeading);
+            }
+        }
 
         public void AddPlayer(int whoAmI, Contribution contribution)
         {
