@@ -10,12 +10,12 @@ namespace BossLeaderboards.Source.Common.UI
 {
     internal class UILeaderboard : UIState
     {
-        private const float MasterPanelWidth = 1400f;
-        private const float MasterPanelHeight = 300f;
+        private const float MasterPanelWidth = 700f;
+        private const float MasterPanelHeight = 350f;
         private const float StatPanelHeight = 40f;
-        private const float PlayerPanelWidth = 80f;
+        private const float PlayerPanelWidth = 120f;
         private const float CloseButtonWidth = 30f;
-        private const float Margin = 30f;
+        private const float Margin = 25f;
 
         private const float DataPanelWidth = MasterPanelWidth - PlayerPanelWidth - Margin * 2;
         private const float DataPanelHeight = MasterPanelHeight - StatPanelHeight - Margin * 3;
@@ -114,7 +114,7 @@ namespace BossLeaderboards.Source.Common.UI
 
             UIText playerName = new(Main.player[whoAmI].name) {
                 HAlign = 0.5f,
-                VAlign = 0.1f * (_data.Count - 1)
+                VAlign = (float)_data.Count / (Utilities.GetActivePlayers(Main.player).Count + 1)
             };
             _playerPanel.Append(playerName);
 
@@ -126,7 +126,7 @@ namespace BossLeaderboards.Source.Common.UI
         {
             UIText statText = new(value) {
                 HAlign = 1f / VisibleStats.Count * (VisibleStats.IndexOf(statName) + 0.5f),
-                VAlign = 0.1f * (_data.Count - 1)
+                VAlign = (float)_data.Count / (Utilities.GetActivePlayers(Main.player).Count + 1)
             };
             _dataPanel.Append(statText);
             _data[whoAmI].Add(statName, statText);
