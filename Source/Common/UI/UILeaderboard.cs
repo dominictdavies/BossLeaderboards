@@ -1,6 +1,7 @@
 ﻿using BossLeaderboards.UI;
 using BossLeaderboards.Source.Common.Player;
 using System.Collections.Generic;
+using Terraria;
 using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
@@ -85,12 +86,12 @@ namespace BossLeaderboards.Source.Common.UI
             _dataPanel.Left.Set(Margin + PlayerPanelWidth, 0);
             masterPanel.Append(_dataPanel);
 
-            _data = new();
-
             _awaitingText = new("Awaiting boss fight...") {
                 HAlign = 0.5f,
                 VAlign = 0.5f
             };
+
+            _data = new();
         }
 
         private void OnCloseButtonClick(UIMouseEvent evt, UIElement listeningElement)
@@ -99,6 +100,12 @@ namespace BossLeaderboards.Source.Common.UI
         public void AddPlayer(int whoAmI, Contribution contribution)
         {
             _data.Add(whoAmI, new());
+
+            UIText playerName = new(Main.player[whoAmI].name) {
+                HAlign = 0.5f,
+                VAlign = 0.1f * (_data.Count - 1)
+            };
+            _playerPanel.Append(playerName);
 
             foreach (string statName in Contribution.StatNames)
                 AddCell(whoAmI, statName, contribution.GetStat(statName).ToString());
@@ -119,6 +126,9 @@ namespace BossLeaderboards.Source.Common.UI
 
         public void RemoveAllData(bool showAwaitingText = false)
         {
+            _playerPanel.RemoveAllChildren();
+            _statPanel.RemoveAllChildren();
+
             foreach (var player in _data)
                 foreach (var stat in player.Value)
                     _dataPanel.RemoveChild(stat.Value);
