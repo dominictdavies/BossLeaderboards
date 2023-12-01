@@ -21,15 +21,19 @@ namespace BossLeaderboards.UI
         {
             if (FightJustBegan())
             {
-                if (Main.netMode != NetmodeID.Server)
-                    leaderboard.RemoveData();
+                if (Main.netMode != NetmodeID.Server) {
+                    leaderboard.RemoveAllData();
+                    leaderboard.AddStatHeadings();
+                }
+
                 _trackedPlayers = Utilities.GetActivePlayers(Main.player);
                 foreach (Player player in _trackedPlayers)
                 {
                     LeaderboardsPlayer leaderboardsPlayer = player.GetModPlayer<LeaderboardsPlayer>();
                     leaderboardsPlayer.contribution = new Contribution();
-                    if (Main.netMode != NetmodeID.Server)
+                    if (Main.netMode != NetmodeID.Server) {
                         leaderboard.AddPlayer(player.whoAmI, leaderboardsPlayer.contribution);
+                    }
                 }
             }
 
