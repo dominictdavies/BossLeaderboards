@@ -20,7 +20,7 @@ namespace BossLeaderboards.Source.Common.UI
         private UIPanel _statPanel;
         private UIText _awaitingText;
         private Dictionary<int, Dictionary<string, UIText>> _data;
-        public static List<string> VisibleStats = [.. Contribution.StatNames];
+        public static List<string> VisibleStats = new(Contribution.StatNames);
 
         public override void OnInitialize()
         {
@@ -70,7 +70,7 @@ namespace BossLeaderboards.Source.Common.UI
             _statPanel.Left.Set(_dataPanel.Left.Pixels, 0);
             masterPanel.Append(_statPanel);
 
-            _data = [];
+            _data = new();
 
             _awaitingText = new("Awaiting boss fight...") {
                 HAlign = VAlign = 0.5f
@@ -82,7 +82,7 @@ namespace BossLeaderboards.Source.Common.UI
 
         public void AddPlayer(int whoAmI, Contribution contribution)
         {
-            _data.Add(whoAmI, []);
+            _data.Add(whoAmI, new());
 
             foreach (string statName in Contribution.StatNames)
                 AddCell(whoAmI, statName, contribution.GetStat(statName).ToString());
